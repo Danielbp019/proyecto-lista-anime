@@ -15,6 +15,8 @@ class AnimeModel extends Model
         'nombre',
         'numero_capitulos',
         'visto',
-        'comentarios'
+        'comentarios',
+        'created_at',
+        'updated_at'
     ];
 }

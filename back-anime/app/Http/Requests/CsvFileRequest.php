@@ -23,7 +23,7 @@ class CsvFileRequest extends FormRequest
     {
         return [
             //
-            'csv_file' => 'required|mimes:csv'
+            'csv-file' => 'required|file|mimes:csv,txt|max:2048',
         ];
     }
 
@@ -31,8 +31,10 @@ class CsvFileRequest extends FormRequest
     {
         return [
             //
-            'csv_file.required' => 'Debes subir un archivo CSV.',
-            'csv_file.mimes' => 'El archivo debe ser de tipo CSV.'
+            'csv-file.required' => 'El archivo CSV es obligatorio.',
+            'csv-file.file' => 'El archivo debe ser un archivo válido.',
+            'csv-file.mimes' => 'El archivo debe ser de tipo CSV o TXT.',
+            'csv-file.max' => 'El archivo no debe superar los 2MB.',
         ];
     }
 }

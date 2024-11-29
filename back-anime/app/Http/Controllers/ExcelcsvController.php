@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\CsvFileRequest;
+use App\Models\AnimeModel;
+use Illuminate\Support\Facades\Response;
 
 class ExcelcsvController extends Controller
 {
@@ -21,37 +23,56 @@ class ExcelcsvController extends Controller
      */
     public function store(CsvFileRequest $request)
     {
-        // Guardar
         try {
-            set_time_limit(300);
-            ini_set('memory_limit', '512M');
-            $path = $request->file('csv_file')->storeAs('uploads', 'uploaded.csv');
+            // El archivo CSV NO debe contener cabeceras! para que esta funcion trabaje. **************
+            // Obtener el archivo validado
+            $file = $request->file('csv-file');
 
-            $dataToInsert = [];
-            $batchSize = 500;
+            // Leer el archivo línea por línea
+            $csvData = array_map('str_getcsv', file($file->getRealPath()));
 
-            if (($handle = fopen(storage_path('app/' . $path), "r")) !== FALSE) {
-                while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                    $dataToInsert[] = [
-                        'nombre' => $data[0],
-                        'numero_capitulos' => $data[1],
-                        'visto' => $data[2],
-                        'comentarios' => $data[3]
-                    ];
-                    if (count($dataToInsert) >= $batchSize) {
-                        DB::table('animes')->insert($dataToInsert);
-                        $dataToInsert = [];
-                    }
-                }
-                fclose($handle);
-                if (!empty($dataToInsert)) {
-                    DB::table('animes')->insert($dataToInsert);
-                }
+            // Verificar que el archivo no esté vacío
+            if (empty($csvData)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El archivo CSV está vacío.'
+                ], 400);
             }
 
-            return response()->json(['success' => true, 'message' => 'CSV cargado.'], 200);
+            // Definir manualmente las cabeceras
+            $headers = ['nombre', 'numero_capitulos', 'visto', 'comentarios'];
+
+            // Iterar sobre los datos y llenarlos en la tabla
+            $animes = [];
+            foreach ($csvData as $row) {
+                if (count($row) !== count($headers)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'El formato del CSV no coincide con el número de columnas esperado.'
+                    ], 400);
+                }
+
+                $animeData = array_combine($headers, $row);
+
+                $animes[] = [
+                    'nombre' => $animeData['nombre'],
+                    'numero_capitulos' => $animeData['numero_capitulos'],
+                    'visto' => $animeData['visto'],
+                    'comentarios' => $animeData['comentarios'],
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
+            }
+
+            // Insertar en la base de datos
+            AnimeModel::insert($animes);
+
+            return response()->json(['success' => true, 'message' => 'CSV cargado exitosamente.'], 200);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Hubo un problema al cargar el CSV. Por favor, inténtalo de nuevo.'], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Hubo un problema al cargar el CSV. Error: ' . $e->getMessage()
+            ], 500);
         }
     }
 
@@ -60,37 +81,48 @@ class ExcelcsvController extends Controller
      */
     public function show(string $id)
     {
-        // Descargar animes
         try {
-            $table = DB::table('animes')->get();
+            // Obtener todos los registros de la tabla `animes`
+            $animes = AnimeModel::all();
 
-            if ($table->isEmpty()) {
-                return response()->json(['success' => false, 'message' => 'No hay datos disponibles.'], 404);
+            if ($animes->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No hay registros en la tabla animes.'
+                ], 404);
             }
 
-            $filename = "animes.csv";
-            $handle = fopen($filename, 'w+');
+            // Crear un archivo CSV temporal
+            $fileName = 'animes_' . now()->format('Ymd_His') . '.csv';
+            $filePath = storage_path("app/public/{$fileName}");
 
-            // Añadir encabezados al CSV
-            fputcsv($handle, array_keys((array) $table[0]));
+            $file = fopen($filePath, 'w');
 
-            // Añadir datos al CSV
-            foreach ($table as $row) {
-                fputcsv($handle, (array) $row);
+            // Agregar encabezados manualmente al CSV
+            $headers = ['nombre', 'numero_capitulos', 'visto', 'comentarios', 'created_at', 'updated_at'];
+            fputcsv($file, $headers);
+
+            // Agregar los datos de la tabla al archivo CSV
+            foreach ($animes as $anime) {
+                fputcsv($file, [
+                    $anime->nombre,
+                    $anime->numero_capitulos,
+                    $anime->visto,
+                    $anime->comentarios,
+                    $anime->created_at,
+                    $anime->updated_at
+                ]);
             }
-            fclose($handle);
 
-            // Preparar headers para la descarga
-            $currentDate = date('Y-m-d'); // Formato de fecha: Año-Mes-Día
-            $downloadName = "animes_$currentDate.csv";
-            $headers = array(
-                'Content-Type' => 'text/csv',
-                'Content-Disposition' => 'attachment; filename="' . $downloadName . '"',
-            );
+            fclose($file);
 
-            return response()->download($filename, $downloadName, $headers)->deleteFileAfterSend(true);
+            // Descargar el archivo CSV
+            return Response::download($filePath)->deleteFileAfterSend(true);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Error al generar el archivo: ' . $e->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Hubo un problema al generar el CSV. Error: ' . $e->getMessage()
+            ], 500);
         }
     }
 
@@ -107,13 +139,19 @@ class ExcelcsvController extends Controller
      */
     public function destroy(string $id)
     {
-        // Vaciar la tabla
         try {
-            DB::table('animes')->truncate();
+            // Truncar la tabla `animes`
+            AnimeModel::truncate();
 
-            return response()->json(['success' => true, 'message' => 'Animes eliminados completamente.'], 200);
+            return response()->json([
+                'success' => true,
+                'message' => 'Todos los registros de la tabla animes han sido eliminados.'
+            ], 200);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Hubo un problema al truncar. Por favor, inténtalo de nuevo.'], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Hubo un problema al vaciar la tabla. Error: ' . $e->getMessage()
+            ], 500);
         }
     }
 }

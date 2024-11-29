@@ -62,6 +62,7 @@ php artisan serve
 ```
 
 ## Notas:
+
 Limpiar la cache de los providers:
 
 ```sh
@@ -77,10 +78,19 @@ php artisan optimize:clear
 Rutas:
 
 ```sh
-GET: http://localhost:8000/api/animes
-POST: http://localhost:8000/api/animes
-PUT: http://localhost:8000/api/animes/1/
+CRUD anime:
+GET:    http://localhost:8000/api/animes
+POST:   http://localhost:8000/api/animes
+PUT:    http://localhost:8000/api/animes/1/
 DELETE: http://localhost:8000/api/animes/1
+```
+
+```sh
+Subir un archivo csv:
+POST:   http://localhost:8000/api/excelcsv
+
+Bajar lista (El {id} es un placeholder, pero no se usará en esta función realmente):
+GET:    http://localhost:8000/api/excelcsv/{id}
 ```
 
 Ejecución de pruebas:
