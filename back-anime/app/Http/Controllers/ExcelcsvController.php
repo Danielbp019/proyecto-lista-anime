@@ -40,7 +40,7 @@ class ExcelcsvController extends Controller
             }
 
             // Definir manualmente las cabeceras
-            $headers = ['nombre', 'numero_capitulos', 'visto', 'comentarios'];
+            $headers = ['nombre', 'numero_capitulos', 'visto', 'comentarios', 'fecha_actualizacion'];
 
             // Iterar sobre los datos y llenarlos en la tabla
             $animes = [];
@@ -59,8 +59,7 @@ class ExcelcsvController extends Controller
                     'numero_capitulos' => $animeData['numero_capitulos'],
                     'visto' => $animeData['visto'],
                     'comentarios' => $animeData['comentarios'],
-                    'created_at' => now(),
-                    'updated_at' => now()
+                    'fecha_actualizacion' => now()
                 ];
             }
 
@@ -99,7 +98,7 @@ class ExcelcsvController extends Controller
             $file = fopen($filePath, 'w');
 
             // Agregar encabezados manualmente al CSV
-            $headers = ['nombre', 'numero_capitulos', 'visto', 'comentarios', 'created_at', 'updated_at'];
+            $headers = ['nombre', 'numero_capitulos', 'visto', 'comentarios', 'fecha_actualizacion'];
             fputcsv($file, $headers);
 
             // Agregar los datos de la tabla al archivo CSV
@@ -109,11 +108,9 @@ class ExcelcsvController extends Controller
                     $anime->numero_capitulos,
                     $anime->visto,
                     $anime->comentarios,
-                    $anime->created_at,
-                    $anime->updated_at
+                    $anime->fecha_actualizacion
                 ]);
             }
-
             fclose($file);
 
             // Descargar el archivo CSV

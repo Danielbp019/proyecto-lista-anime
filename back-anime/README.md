@@ -91,6 +91,9 @@ POST:   http://localhost:8000/api/excelcsv
 
 Bajar lista (El {id} es un placeholder, pero no se usará en esta función realmente):
 GET:    http://localhost:8000/api/excelcsv/{id}
+
+Trunca la informacion de la tabla animes:
+DELETE: http://localhost:8000/api/excelcsv/{id}
 ```
 
 Ejecución de pruebas:

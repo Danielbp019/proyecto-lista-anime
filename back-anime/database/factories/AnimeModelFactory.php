@@ -17,8 +17,9 @@ class AnimeModelFactory extends Factory
         return [
             'nombre' => $this->faker->word,
             'numero_capitulos' => $this->faker->numberBetween(1, 100),
-            'visto' => $this->faker->boolean,
+            'visto' => $this->faker->randomElement([0, 1]),
             'comentarios' => $this->faker->sentence,
+            'fecha_actualizacion' => $this->faker->date(),
         ];
     }
 }

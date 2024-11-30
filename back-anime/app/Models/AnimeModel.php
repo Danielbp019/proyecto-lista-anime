@@ -11,12 +11,17 @@ class AnimeModel extends Model
 
     protected $table = 'animes';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'nombre',
         'numero_capitulos',
         'visto',
         'comentarios',
-        'created_at',
-        'updated_at'
+        'fecha_actualizacion'
+    ];
+
+    protected $casts = [
+        'visto' => 'integer',
     ];
 }

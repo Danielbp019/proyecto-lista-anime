@@ -23,8 +23,7 @@ class AnimeController extends Controller
             'numero_capitulos',
             'visto',
             'comentarios',
-            'updated_at',
-            'created_at'
+            'fecha_actualizacion'
         )
             ->get();
         return response()->json($anime);
@@ -41,7 +40,8 @@ class AnimeController extends Controller
                 'nombre' => trim($request['nombre']),
                 'numero_capitulos' => trim($request['numero_capitulos']),
                 'visto' => $request['visto'],
-                'comentarios' => trim($request['comentarios'])
+                'comentarios' => trim($request['comentarios']),
+                'fecha_actualizacion' => $request['fecha_actualizacion'],
             ]);
 
             return response()->json(['success' => true, 'nuevoAnime' => $nuevoAnime], 201);
@@ -85,6 +85,9 @@ class AnimeController extends Controller
             }
             if ($request->has('comentarios')) {
                 $editarAnime->comentarios = trim($request['comentarios']);
+            }
+            if ($request->has('fecha_actualizacion')) {
+                $editarAnime->fecha_actualizacion = $request['fecha_actualizacion'];
             }
             $editarAnime->save();
 

@@ -8,11 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Utf8Response
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
+    // Afecta principalmente las respuestas JSON, asegurándose de que los datos JSON se devuelvan con codificación UTF-8 sin caracteres escapados.
     public function handle(Request $request, Closure $next): Response
     {
         $response = $next($request);

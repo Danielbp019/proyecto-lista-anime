@@ -15,12 +15,12 @@ class AnimeControllerTest extends TestCase
     {
         $response = $this->get('/api/animes');
         $response->assertStatus(200);
-        $response->assertJsonStructure(['*' => ['id', 'nombre', 'numero_capitulos', 'visto', 'comentarios', 'updated_at', 'created_at']]);
+        $response->assertJsonStructure(['*' => ['id', 'nombre', 'numero_capitulos', 'visto', 'comentarios', 'fecha_actualizacion']]);
     }
 
     public function test_anime_store()
     {
-        $data = ['nombre' => 'Nuevo Anime', 'numero_capitulos' => 12, 'visto' => 1, 'comentarios' => 'Este es un nuevo anime.'];
+        $data = ['nombre' => 'Nuevo Anime', 'numero_capitulos' => 12, 'visto' => 1, 'comentarios' => 'Este es un nuevo anime.', 'fecha_actualizacion' => now()];
         $response = $this->post('/api/animes', $data);
         $response->assertStatus(201);
         $response->assertJson(['success' => true, 'nuevoAnime' => $data]);
@@ -38,14 +38,13 @@ class AnimeControllerTest extends TestCase
         $response->assertJsonPath('numero_capitulos', $anime->numero_capitulos);
         $response->assertJsonPath('visto', (int) $anime->visto); // Convertir booleano a entero
         $response->assertJsonPath('comentarios', $anime->comentarios);
-        $response->assertJsonPath('created_at', $anime->created_at->toJSON());
-        $response->assertJsonPath('updated_at', $anime->updated_at->toJSON());
+        $response->assertJsonPath('fecha_actualizacion', $anime->fecha_actualizacion);
     }
 
     public function test_anime_update()
     {
         $anime = AnimeModel::factory()->create();
-        $data = ['nombre' => 'Anime Actualizado', 'numero_capitulos' => 24, 'visto' => 0, 'comentarios' => 'Este anime ha sido actualizado.'];
+        $data = ['nombre' => 'Anime Actualizado', 'numero_capitulos' => 24, 'visto' => 0, 'comentarios' => 'Este anime ha sido actualizado.', 'fecha_actualizacion' => now()];
         $response = $this->put("/api/animes/{$anime->id}", $data);
         $response->assertStatus(200);
         $response->assertJson(['success' => true, 'editarAnime' => $data]);
