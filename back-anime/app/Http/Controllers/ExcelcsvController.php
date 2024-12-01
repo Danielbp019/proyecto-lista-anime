@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Requests\CsvFileRequest;
 use App\Models\AnimeModel;
 use Illuminate\Support\Facades\Response;
@@ -24,11 +23,9 @@ class ExcelcsvController extends Controller
     public function store(CsvFileRequest $request)
     {
         try {
-            // El archivo CSV NO debe contener cabeceras! para que esta funcion trabaje. **************
             // Obtener el archivo validado
             $file = $request->file('csv-file');
-
-            // Leer el archivo línea por línea
+            // Leer todas las líneas del archivo CSV
             $csvData = array_map('str_getcsv', file($file->getRealPath()));
 
             // Verificar que el archivo no esté vacío
@@ -39,30 +36,35 @@ class ExcelcsvController extends Controller
                 ], 400);
             }
 
-            // Definir manualmente las cabeceras
-            $headers = ['nombre', 'numero_capitulos', 'visto', 'comentarios', 'fecha_actualizacion'];
+            // Cabeceras esperadas
+            $expectedHeaders = ['nombre', 'numero_capitulos', 'visto', 'comentarios', 'fecha_actualizacion'];
+
+            // Verificar si la primera fila son las cabeceras esperadas
+            $firstRow = $csvData[0];
+            if ($firstRow === $expectedHeaders) {
+                // Eliminar las cabeceras del CSV si están presentes
+                array_shift($csvData);
+            }
 
             // Iterar sobre los datos y llenarlos en la tabla
             $animes = [];
             foreach ($csvData as $row) {
-                if (count($row) !== count($headers)) {
+                if (count($row) !== count($expectedHeaders)) {
                     return response()->json([
                         'success' => false,
                         'message' => 'El formato del CSV no coincide con el número de columnas esperado.'
                     ], 400);
                 }
-
-                $animeData = array_combine($headers, $row);
+                $animeData = array_combine($expectedHeaders, $row);
 
                 $animes[] = [
                     'nombre' => $animeData['nombre'],
                     'numero_capitulos' => $animeData['numero_capitulos'],
                     'visto' => $animeData['visto'],
                     'comentarios' => $animeData['comentarios'],
-                    'fecha_actualizacion' => now()
+                    'fecha_actualizacion' => $animeData['fecha_actualizacion'] ?: now()
                 ];
             }
-
             // Insertar en la base de datos
             AnimeModel::insert($animes);
 
@@ -94,7 +96,6 @@ class ExcelcsvController extends Controller
             // Crear un archivo CSV temporal
             $fileName = 'animes_' . now()->format('Ymd_His') . '.csv';
             $filePath = storage_path("app/public/{$fileName}");
-
             $file = fopen($filePath, 'w');
 
             // Agregar encabezados manualmente al CSV
