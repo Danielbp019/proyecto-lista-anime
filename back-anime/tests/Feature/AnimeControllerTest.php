@@ -20,7 +20,7 @@ class AnimeControllerTest extends TestCase
 
     public function test_anime_store()
     {
-        $data = ['nombre' => 'Nuevo Anime', 'numero_capitulos' => 12, 'visto' => 1, 'comentarios' => 'Este es un nuevo anime.', 'fecha_actualizacion' => now()];
+        $data = ['nombre' => 'Nuevo Anime', 'numero_capitulos' => 12, 'visto' => 1, 'comentarios' => 'Este es un nuevo anime.', 'fecha_actualizacion' => '2024-12-01'];
         $response = $this->post('/api/animes', $data);
         $response->assertStatus(201);
         $response->assertJson(['success' => true, 'nuevoAnime' => $data]);
@@ -44,7 +44,7 @@ class AnimeControllerTest extends TestCase
     public function test_anime_update()
     {
         $anime = AnimeModel::factory()->create();
-        $data = ['nombre' => 'Anime Actualizado', 'numero_capitulos' => 24, 'visto' => 0, 'comentarios' => 'Este anime ha sido actualizado.', 'fecha_actualizacion' => now()];
+        $data = ['nombre' => 'Anime Actualizado', 'numero_capitulos' => 24, 'visto' => 0, 'comentarios' => 'Este anime ha sido actualizado.', 'fecha_actualizacion' => '2024-12-01'];
         $response = $this->put("/api/animes/{$anime->id}", $data);
         $response->assertStatus(200);
         $response->assertJson(['success' => true, 'editarAnime' => $data]);

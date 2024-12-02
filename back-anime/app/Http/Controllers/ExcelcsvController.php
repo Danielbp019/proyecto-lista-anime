@@ -60,8 +60,8 @@ class ExcelcsvController extends Controller
                 $animes[] = [
                     'nombre' => $animeData['nombre'],
                     'numero_capitulos' => $animeData['numero_capitulos'],
-                    'visto' => $animeData['visto'],
-                    'comentarios' => $animeData['comentarios'],
+                    'visto' => $animeData['visto'] ?: 1,
+                    'comentarios' => $animeData['comentarios'] ?: 'Nada que decir o leer por aquí...',
                     'fecha_actualizacion' => $animeData['fecha_actualizacion'] ?: now()
                 ];
             }
