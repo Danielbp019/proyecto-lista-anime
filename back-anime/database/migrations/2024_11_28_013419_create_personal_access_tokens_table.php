@@ -13,13 +13,16 @@ return new class extends Migration
     {
         Schema::create('personal_access_tokens', function (Blueprint $table) {
             $table->id();
-            $table->morphs('tokenable');
+            $table->string('tokenable_type'); // Clase del modelo relacionado
+            $table->char('tokenable_id', 36); // UUID como string de 36 caracteres
             $table->string('name');
             $table->string('token', 64)->unique();
             $table->text('abilities')->nullable();
             $table->timestamp('last_used_at')->nullable();
             $table->timestamp('expires_at')->nullable();
             $table->timestamps();
+            // Índice combinado para optimizar consultas polimórficas
+            $table->index(['tokenable_type', 'tokenable_id']);
         });
     }
 

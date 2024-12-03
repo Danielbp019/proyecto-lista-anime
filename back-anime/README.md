@@ -25,10 +25,6 @@ Laravel is accessible, powerful, and provides tools required for large, robust a
 
 If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-
 # Instrucciones
 
 ## Instalación
@@ -75,28 +71,43 @@ Limpiar todo:
 php artisan optimize:clear
 ```
 
-Rutas:
+## Rutas
+
+CRUD anime:
 
 ```sh
-CRUD anime:
 GET:    http://localhost:8000/api/animes
 POST:   http://localhost:8000/api/animes
 PUT:    http://localhost:8000/api/animes/1/
 DELETE: http://localhost:8000/api/animes/1
 ```
 
-```sh
 Subir un archivo csv:
+
+```sh
 POST:   http://localhost:8000/api/excelcsv
-
-Bajar lista (El {id} es un placeholder, pero no se usará en esta función realmente):
-GET:    http://localhost:8000/api/excelcsv/{id}
-
-Trunca la informacion de la tabla animes:
-DELETE: http://localhost:8000/api/excelcsv/{id}
 ```
 
-Ejecución de pruebas:
+Bajar lista (El {id} es un placeholder, pero no se usará en esta función realmente):
+
+```sh
+GET:    http://localhost:8000/api/excelcsv/{id}
+```
+
+Borra toda la informacion de la tabla animes:
+
+```sh
+DELETE: http://localhost:8000/api/excelcsv/{id}
+
+```
+
+Registro con sactum y uuid ( La contraseña debe tener al menos dos letras mayúsculas, dos letras minúsculas, dos números y una longitud mínima de 12 caracteres):
+
+```sh
+POST:   http://localhost:8000/api/register
+```
+
+Ejecución de pruebas (Las pruebas suelen crean archivos en la carpeta storage/app que son desechables):
 
 ```sh
 php artisan test

@@ -34,7 +34,7 @@ class CsvFileRequest extends FormRequest
             'csv-file.required' => 'El archivo CSV es obligatorio.',
             'csv-file.file' => 'El archivo debe ser un archivo válido.',
             'csv-file.mimes' => 'El archivo debe ser de tipo CSV o TXT.',
-            'csv-file.max' => 'El archivo no debe superar los 2MB.',
+            'csv-file.max' => 'El archivo no debe superar los 2MB.'
         ];
     }
 }
