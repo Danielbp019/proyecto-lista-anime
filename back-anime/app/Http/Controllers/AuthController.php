@@ -6,28 +6,31 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserModel;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\LoginRequest;
 
 class AuthController extends Controller
 {
-    // Inicio de sesión
-    public function login(Request $request)
+    // Inicio de sesión 
+    public function login(LoginRequest $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-
-        if (!Auth::attempt($credentials)) {
+        // Intenta autenticar con las credenciales validadas
+        if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json(['message' => 'Credenciales inválidas'], 401);
         }
 
         $user = Auth::user();
-        /** @var \App\Models\MyUserModel $user **/
-        $token = $user->createToken('auth_token')->plainTextToken;
+        // Revocar todos los tokens anteriores
+        /** @var \App\Models\ $user **/
+        $user->tokens()->delete();
+        // Crear un nuevo token
+        $newToken = $user->createToken('auth_token');
+        // Establecemos la expiración del token recién creado
+        $newToken->accessToken->expires_at = now()->addHours(24);  // Expira en 24 horas
+        $newToken->accessToken->save();
 
         return response()->json([
             'user' => $user,
-            'token' => $token,
+            'token' => $newToken->plainTextToken,
         ]);
     }
 

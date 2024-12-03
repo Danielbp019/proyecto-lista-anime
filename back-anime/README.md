@@ -107,6 +107,12 @@ Registro con sactum y uuid ( La contraseña debe tener al menos dos letras mayú
 POST:   http://localhost:8000/api/register
 ```
 
+Login:
+
+```sh
+POST    http://localhost:8000/api/login
+```
+
 Ejecución de pruebas (Las pruebas suelen crean archivos en la carpeta storage/app que son desechables):
 
 ```sh
