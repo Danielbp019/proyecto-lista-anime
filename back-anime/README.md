@@ -21,13 +21,9 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
 # Instrucciones
 
-## Instalación
+## 💿 Instalación
 
 Teniendo composer instalado y php en el equipo:
 
@@ -57,21 +53,7 @@ php artisan migrate
 php artisan serve
 ```
 
-## Notas:
-
-Limpiar la cache de los providers:
-
-```sh
-composer dump-autoload
-```
-
-Limpiar todo:
-
-```sh
-php artisan optimize:clear
-```
-
-## Rutas
+## 💡 Rutas
 
 CRUD anime:
 
@@ -118,3 +100,21 @@ Ejecución de pruebas (Las pruebas suelen crean archivos en la carpeta storage/a
 ```sh
 php artisan test
 ```
+
+## 📑 Notas:
+
+Limpiar la cache de los providers:
+
+```sh
+composer dump-autoload
+```
+
+Limpiar todo:
+
+```sh
+php artisan optimize:clear
+```
+
+### Consideraciones
+
+La tabla "personal_access_tokens" necesita un vaciado cada cierto tiempo por acumulación de historial.
