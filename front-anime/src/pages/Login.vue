@@ -4,6 +4,9 @@
         <v-card>
             <v-card-title>Iniciar Sesión</v-card-title>
             <v-card-text>
+                <v-snackbar v-model="showAlert" :color="alertType" :timeout="2000">
+                    {{ alertMessage }}
+                </v-snackbar>
                 <v-form @submit.prevent="submitLogin">
 
                     <v-text-field v-model="email" label="Email" :rules="emailRules" required></v-text-field>
@@ -12,6 +15,7 @@
                     <v-btn type="submit" color="primary">Iniciar Sesión</v-btn>
                 </v-form>
             </v-card-text>
+            <v-progress-linear v-if="loading" color="primary" indeterminate></v-progress-linear>
         </v-card>
     </v-container>
 </template>
@@ -26,6 +30,10 @@ export default {
         return {
             email: '',
             password: '',
+            showAlert: false,
+            alertMessage: '',
+            alertType: 'success',
+            loading: false,
             emailRules: [
                 (v) => !!v || 'El email es requerido',
                 (v) => /.+@.+\..+/.test(v) || 'El email debe tener un formato válido',
@@ -40,6 +48,7 @@ export default {
     },
     methods: {
         async submitLogin() {
+            this.loading = true;
             try {
                 const response = await apiClient.post('/login', {
                     email: this.email,
@@ -51,11 +60,17 @@ export default {
                     localStorage.setItem('userName', response.data.user.name); // Guarda el nombre en localStorage
                     router.push({ name: 'Dashboard' }); // Redirige al dashboard
                 } else {
-                    this.errors = response.data.message || 'Error al iniciar sesión';
+                    this.alertType = 'error';
+                    this.alertMessage = response.data.message || 'Error al iniciar sesión';
+                    this.showAlert = true;
                 }
             } catch (error) {
                 console.error('Error en la autenticación:', error);
-                this.errors = 'Error en la solicitud';
+                this.alertType = 'error';
+                this.alertMessage = error.response?.data?.message || 'Error en la solicitud';
+                this.showAlert = true;
+            } finally {
+                this.loading = false;
             }
         },
     },

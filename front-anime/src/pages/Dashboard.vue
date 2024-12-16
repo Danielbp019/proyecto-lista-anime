@@ -28,7 +28,7 @@ export default {
         logout() {
             removeAuthToken(); // Elimina el token de las cookies
             localStorage.removeItem('userName'); // Elimina el nombre del usuario
-            router.push({ name: 'Login' }); // Redirige al login
+            router.push({ name: '/' }); // Redirige al inicio
         },
     },
 };
