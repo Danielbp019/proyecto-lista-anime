@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import { removeAuthToken } from '@/services/authService';
 import router from '@/router';
 
@@ -33,7 +34,6 @@ export default {
     },
 };
 </script>
-
 
 <style scoped>
 .dashboard {

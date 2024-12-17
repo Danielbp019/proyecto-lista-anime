@@ -1,5 +1,5 @@
 /**
- * router/index.ts
+ * router/index.js
  *
  * Automatic routes for `./src/pages/*.vue`
  */
@@ -9,8 +9,8 @@ import { createRouter, createWebHistory } from 'vue-router/auto'
 import { setupLayouts } from 'virtual:generated-layouts'
 import { routes as autoRoutes } from 'vue-router/auto-routes'
 import { isAuthenticated } from '@/services/authService'
-import Login from '@/pages/Login.vue'
-import Register from '@/pages/Register.vue'
+import Login from '@/pages/authentication/Login.vue'
+import Register from '@/pages/authentication/Register.vue'
 import Dashboard from '@/pages/Dashboard.vue'
 
 const customRoutes = [

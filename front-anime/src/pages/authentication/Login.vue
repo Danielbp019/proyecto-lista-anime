@@ -12,7 +12,8 @@
                     <v-text-field v-model="email" label="Email" :rules="emailRules" required></v-text-field>
                     <v-text-field v-model="password" label="Contraseña" :rules="passwordRules" type="password"
                         required></v-text-field>
-                    <v-btn type="submit" color="primary">Iniciar Sesión</v-btn>
+                    <v-btn type="submit" color="primary">Iniciar Sesión <svg-icon type="mdi"
+                            :path="path"></svg-icon></v-btn>
                 </v-form>
             </v-card-text>
             <v-progress-linear v-if="loading" color="primary" indeterminate></v-progress-linear>
@@ -21,13 +22,21 @@
 </template>
 
 <script>
+//Iconos
+import SvgIcon from '@jamescoyle/vue-icon'
+import { mdiAccount } from '@mdi/js'
+//Funcionales
 import apiClient from '@/plugins/axios';
 import { setAuthToken } from '@/services/authService';
 import router from '@/router';
 
 export default {
+    components: {
+        SvgIcon
+    },
     data() {
         return {
+            path: mdiAccount,
             email: '',
             password: '',
             showAlert: false,
