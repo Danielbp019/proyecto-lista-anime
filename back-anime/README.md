@@ -80,7 +80,6 @@ Borra toda la informacion de la tabla animes:
 
 ```sh
 DELETE: http://localhost:8000/api/excelcsv/{id}
-
 ```
 
 Registro con sactum y uuid ( La contraseña debe tener al menos dos letras mayúsculas, dos letras minúsculas, dos números y una longitud mínima de 12 caracteres):
@@ -89,10 +88,11 @@ Registro con sactum y uuid ( La contraseña debe tener al menos dos letras mayú
 POST:   http://localhost:8000/api/register
 ```
 
-Login:
+Login y logout:
 
 ```sh
 POST    http://localhost:8000/api/login
+POST    http://localhost:8000/api/logout
 ```
 
 Ejecución de pruebas (Las pruebas suelen crean archivos en la carpeta storage/app que son desechables):
