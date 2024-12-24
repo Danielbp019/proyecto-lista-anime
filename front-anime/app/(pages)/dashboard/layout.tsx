@@ -58,8 +58,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </li>
           <li>
             <a href="/dashboard" className="flex items-center">
-              <i className="bi bi-house-door"></i> {/* Icono cambiado a casa */}
+              <i className="bi bi-house-door"></i>
               <span className="ml-2">Escritorio</span>
+            </a>
+          </li>
+          <li>
+            <a href="/dashboard/anime" className="flex items-center">
+              <i className="bi bi-list-stars"></i>
+              <span className="ml-2">Lista anime</span>
             </a>
           </li>
         </ul>
