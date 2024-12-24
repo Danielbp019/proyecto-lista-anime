@@ -1,5 +1,6 @@
-//(pages)/register/page.tsx
+// (pages)/(auth)/register/page.tsx
 'use client';
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';

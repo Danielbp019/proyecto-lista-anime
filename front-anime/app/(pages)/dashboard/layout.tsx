@@ -1,5 +1,6 @@
-//(pages)/(dashboard)/layout.tsx
+// (pages)/layout.tsx
 'use client';
+
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -75,9 +76,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="flex items-center text-primary">
               <Image src="/logo.png" alt="Logo" className="h-6 w-auto" width={50} height={50} />
               <span className="hidden md:inline-block font-bold ml-2">DB Admin</span>
-              {error && <p className="text-error text-sm text-center mb-4">{error}</p>}
             </div>
           </div>
+          {error && <p className="text-error text-sm text-center mb-4">{error}</p>}
           <nav className="flex items-center space-x-4">
             <div className="dropdown dropdown-end">
               <label tabIndex={0} className="btn btn-ghost btn-circle">

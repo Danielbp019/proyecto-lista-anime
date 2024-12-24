@@ -1,5 +1,6 @@
-//(pages)/login/page.tsx
+// (pages)/(auth)/login/page.tsx
 'use client';
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
@@ -26,13 +27,13 @@ export default function Login() {
       setIsLoading(true);
       loginSchema.parse(formData); // Validación antes de enviar datos
       const response = await login(formData);
-      document.cookie = `auth_token=${response.data.token}; max-age=${12 * 60 * 60}`; // Guardar token en cookie
+      document.cookie = `auth_token=${response.data.token}; max-age=${12 * 60 * 60};  HttpOnly; SameSite=Strict`; //Guardar cookie. Secure; se usa cuando se use https
       router.push('/dashboard');
     } catch (err) {
       if (err instanceof z.ZodError) {
         setError(err.errors[0].message);
       } else {
-        setError('Inicio de sesión fallido. Verifique sus credenciales.');
+        setError('Credenciales incorrectas o cuenta no encontrada.');
       }
     } finally {
       setIsLoading(false);
