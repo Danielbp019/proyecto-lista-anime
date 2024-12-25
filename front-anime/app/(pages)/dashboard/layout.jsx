@@ -65,7 +65,7 @@ export default function DashboardLayout({ children }) {
           <li>
             <a href="/dashboard/anime" className="flex items-center">
               <i className="bi bi-list-stars"></i>
-              <span className="ml-2">Lista anime</span>
+              <span className="ml-2">Lista de animes</span>
             </a>
           </li>
         </ul>

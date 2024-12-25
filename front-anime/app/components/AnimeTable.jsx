@@ -101,18 +101,50 @@ export default function AnimeTable() {
             ))
           ) : (
             <tr>
-              <td colSpan={columns.length}>Información no disponible</td>
+              <td colSpan={columns.length}>
+                <div className="flex justify-center items-center">
+                  Cargando datos
+                  <span className="ml-4 loading loading-dots loading-lg text-warning"></span>
+                </div>
+              </td>
             </tr>
           )}
         </tbody>
       </table>
 
       {/* Paginacion */}
-      <div className="flex justify-center items-center space-x-2 mt-4">
-        <button onClick={() => table.setPageIndex(0)}>Primera</button>
-        <button onClick={() => table.previousPage()}>Anterior</button>
-        <button onClick={() => table.nextPage()}>Siguiente</button>
-        <button onClick={() => table.setPageIndex(table.getPageCount() - 1)}>Ultima</button>
+      <div className="flex justify-center">
+        <div className="join">
+          <button className="join-item btn btn-outline" onClick={() => table.setPageIndex(0)}>
+            Primera
+          </button>
+          <button className="join-item btn btn-outline" onClick={() => table.previousPage()}>
+            Anterior
+          </button>
+          <button className="join-item btn btn-outline" onClick={() => table.nextPage()}>
+            Siguiente
+          </button>
+          <button
+            className="join-item btn btn-outline"
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+          >
+            Ultima
+          </button>
+
+          <select
+            className="join-item btn btn-outline"
+            value={table.getState().pagination.pageSize}
+            onChange={(e) => {
+              table.setPageSize(Number(e.target.value));
+            }}
+          >
+            {[10, 20, 30, 40, 50].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                {pageSize}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
     </div>
   );
