@@ -1,6 +1,4 @@
-//tailwind.config.ts
-import type { Config } from 'tailwindcss';
-
+/** @type {import('tailwindcss').Config} */
 export default {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -49,4 +47,4 @@ export default {
       'winter',
     ],
   },
-} satisfies Config;
+};

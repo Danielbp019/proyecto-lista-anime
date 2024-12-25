@@ -1,33 +1,26 @@
-// components/AnimeModal.tsx
-import React, { useState } from 'react';
-import { AnimeData } from '../services/animesService';
+// components/AnimeModal.jsx
+import React, { useState } from "react";
 
-interface AnimeModalProps {
-  anime: AnimeData | null;
-  onClose: () => void;
-  onSave: (anime: AnimeData) => void;
-}
-
-export default function AnimeModal({ anime, onClose, onSave }: AnimeModalProps) {
-  const [formData, setFormData] = useState<AnimeData>(
+export default function AnimeModal({ anime, onClose, onSave }) {
+  const [formData, setFormData] = useState(
     anime || {
       id: 0,
-      nombre: '',
+      nombre: "",
       numero_capitulos: 0,
       visto: 0,
-      comentarios: '',
+      comentarios: "",
       fecha_actualizacion: new Date().toISOString().slice(0, 10),
     }
   );
 
-  const handleChange = (key: keyof AnimeData, value: string | number) => {
+  const handleChange = (key, value) => {
     setFormData({ ...formData, [key]: value });
   };
 
   return (
     <div className="modal modal-open">
       <div className="modal-box">
-        <h3 className="font-bold text-lg">{anime ? 'Editar Anime' : 'Agregar Nuevo Anime'}</h3>
+        <h3 className="font-bold text-lg">{anime ? "Editar Anime" : "Agregar Nuevo Anime"}</h3>
         <div className="form-control">
           <label className="label">
             <span className="label-text">Nombre</span>
@@ -36,7 +29,7 @@ export default function AnimeModal({ anime, onClose, onSave }: AnimeModalProps) 
             type="text"
             className="input input-bordered"
             value={formData.nombre}
-            onChange={(e) => handleChange('nombre', e.target.value)}
+            onChange={(e) => handleChange("nombre", e.target.value)}
           />
         </div>
         <div className="form-control">
@@ -47,7 +40,7 @@ export default function AnimeModal({ anime, onClose, onSave }: AnimeModalProps) 
             type="number"
             className="input input-bordered"
             value={formData.numero_capitulos}
-            onChange={(e) => handleChange('numero_capitulos', +e.target.value)}
+            onChange={(e) => handleChange("numero_capitulos", +e.target.value)}
           />
         </div>
         <div className="form-control">
@@ -57,7 +50,7 @@ export default function AnimeModal({ anime, onClose, onSave }: AnimeModalProps) 
           <select
             className="select select-bordered"
             value={formData.visto}
-            onChange={(e) => handleChange('visto', +e.target.value)}
+            onChange={(e) => handleChange("visto", +e.target.value)}
           >
             <option value={0}>No</option>
             <option value={1}>Sí</option>
@@ -70,7 +63,7 @@ export default function AnimeModal({ anime, onClose, onSave }: AnimeModalProps) 
           <textarea
             className="textarea textarea-bordered"
             value={formData.comentarios}
-            onChange={(e) => handleChange('comentarios', e.target.value)}
+            onChange={(e) => handleChange("comentarios", e.target.value)}
           ></textarea>
         </div>
         <div className="modal-action">

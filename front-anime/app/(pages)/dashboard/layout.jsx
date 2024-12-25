@@ -1,13 +1,13 @@
-// (pages)/layout.tsx
-'use client';
+// (pages)/layout.jsx
+"use client";
 
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { logout } from '@/app/services/authService';
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { logout } from "@/app/services/authService";
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const [error, setError] = useState<string>('');
+export default function DashboardLayout({ children }) {
+  const [error, setError] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
 
@@ -15,9 +15,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const handleOutsideClick = (event: MouseEvent) => {
-    const target = event.target as HTMLElement;
-    if (!target.closest('aside') && !target.closest('button')) {
+  const handleOutsideClick = (event) => {
+    const target = event.target;
+    if (!target.closest("aside") && !target.closest("button")) {
       setIsSidebarOpen(false);
     }
   };
@@ -25,22 +25,22 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const handleLogout = async () => {
     try {
       await logout();
-      document.cookie = 'auth_token=; max-age=0'; // Eliminar token
-      router.push('/');
+      document.cookie = "auth_token=; max-age=0"; // Eliminar token
+      router.push("/");
     } catch (error) {
-      console.error('Error al cerrar sesión:', error);
-      setError('Error al cerrar sesión');
+      console.error("Error al cerrar sesión:", error);
+      setError("Error al cerrar sesión");
     }
   };
 
   useEffect(() => {
     if (isSidebarOpen) {
-      document.addEventListener('click', handleOutsideClick);
+      document.addEventListener("click", handleOutsideClick);
     } else {
-      document.removeEventListener('click', handleOutsideClick);
+      document.removeEventListener("click", handleOutsideClick);
     }
     return () => {
-      document.removeEventListener('click', handleOutsideClick);
+      document.removeEventListener("click", handleOutsideClick);
     };
   }, [isSidebarOpen]);
 
@@ -49,7 +49,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Sidebar */}
       <aside
         className={`fixed top-0 left-0 bg-base-200 shadow-md h-full transition-transform transform md:translate-x-0 ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } w-64 z-50 md:static`}
       >
         <ul className="menu p-4 space-y-2">

@@ -1,39 +1,39 @@
-// (pages)/(auth)/login/page.tsx
-'use client';
+// (pages)/(auth)/login/page.jsx
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { z } from 'zod';
-import { login, LoginData } from '@/app/services/authService';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { z } from "zod";
+import { login } from "@/app/services/authService";
 
 const loginSchema = z.object({
-  email: z.string().email('Correo electrónico no válido'),
-  password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
+  email: z.string().email("Correo electrónico no válido"),
+  password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
 });
 
 export default function Login() {
-  const [formData, setFormData] = useState<LoginData>({ email: '', password: '' });
-  const [error, setError] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setIsLoading(true);
       loginSchema.parse(formData); // Validación antes de enviar datos
       const response = await login(formData);
       document.cookie = `auth_token=${response.data.token}; max-age=${12 * 60 * 60};  HttpOnly; SameSite=Strict`; //Guardar cookie. Secure; se usa cuando se use https
-      router.push('/dashboard');
+      router.push("/dashboard");
     } catch (err) {
       if (err instanceof z.ZodError) {
         setError(err.errors[0].message);
       } else {
-        setError('Credenciales incorrectas o cuenta no encontrada.');
+        setError("Credenciales incorrectas o cuenta no encontrada.");
       }
     } finally {
       setIsLoading(false);
@@ -75,7 +75,7 @@ export default function Login() {
         </div>
         <button
           type="submit"
-          className={`btn btn-primary w-full flex justify-center items-center ${isLoading ? 'cursor-not-allowed' : ''}`}
+          className={`btn btn-primary w-full flex justify-center items-center ${isLoading ? "cursor-not-allowed" : ""}`}
           disabled={isLoading}
         >
           {isLoading ? (
@@ -88,7 +88,7 @@ export default function Login() {
         </button>
         <div className="mt-4 text-center">
           <p>
-            ¿No tienes cuenta?{' '}
+            ¿No tienes cuenta?{" "}
             <a href="/register" className="link link-primary">
               Regístrate
             </a>
