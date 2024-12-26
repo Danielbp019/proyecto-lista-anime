@@ -74,6 +74,10 @@ export default function AnimePage() {
     setAnimeToEdit(null); // Limpiar selección
   };
 
+  const handleClearSearch = () => {
+    setColumnFilters([]); // Limpia el campo de búsqueda
+  };
+
   const columns = [
     { accessorKey: "nombre", header: "Nombre", filterFn: "includesString" },
     { accessorKey: "numero_capitulos", header: "Capítulos" },
@@ -115,7 +119,7 @@ export default function AnimePage() {
   });
 
   return (
-    <div className="flex flex-col items-center justify-center h-full">
+    <div className="flex flex-col items-center h-full">
       <div className="flex items-center justify-between w-full mb-4">
         <nav className="text-sm breadcrumbs flex-1">
           <ol className="breadcrumb">
@@ -130,13 +134,18 @@ export default function AnimePage() {
           </ol>
         </nav>
         <h1 className="text-2xl font-bold text-center flex-1">Listado de Animes</h1>
-        <input
-          type="text"
-          placeholder="Buscar por nombre..."
-          className="input input-bordered w-1/3 flex-1 ml-4"
-          value={columnFilters.find((filter) => filter.id === "nombre")?.value || ""}
-          onChange={(e) => setColumnFilters([{ id: "nombre", value: e.target.value }])}
-        />
+        <div className="flex items-center w-1/3 flex-1 ml-4">
+          <input
+            type="text"
+            placeholder="Buscar por nombre..."
+            className="input input-bordered input-primary input-md w-full max-w-xs"
+            value={columnFilters.find((filter) => filter.id === "nombre")?.value || ""}
+            onChange={(e) => setColumnFilters([{ id: "nombre", value: e.target.value }])}
+          />
+          <button className="btn btn-primary ml-2" onClick={handleClearSearch}>
+            Borrar
+          </button>
+        </div>
       </div>
       <div className="overflow-x-auto w-full">
         <table className="table w-full">
