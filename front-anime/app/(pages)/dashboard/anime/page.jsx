@@ -120,31 +120,36 @@ export default function AnimePage() {
 
   return (
     <div className="flex flex-col items-center h-full">
-      <div className="flex items-center justify-between w-full mb-4">
-        <nav className="text-sm breadcrumbs flex-1">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <a href="/dashboard" className="link">
-                Escritorio
-              </a>
-            </li>
-            <li className="breadcrumb-item active">
-              <span>Lista de animes</span>
-            </li>
-          </ol>
-        </nav>
-        <h1 className="text-2xl font-bold text-center flex-1">Listado de Animes</h1>
-        <div className="flex items-center w-1/3 flex-1 ml-4">
-          <input
-            type="text"
-            placeholder="Buscar por nombre..."
-            className="input input-bordered input-primary input-md w-full max-w-xs"
-            value={columnFilters.find((filter) => filter.id === "nombre")?.value || ""}
-            onChange={(e) => setColumnFilters([{ id: "nombre", value: e.target.value }])}
-          />
-          <button className="btn btn-primary ml-2" onClick={handleClearSearch}>
-            Borrar
+      <div className="w-full mb-4">
+        <h1 className="text-2xl font-bold text-left">Listado de Animes</h1>
+        <div className="flex items-center justify-between mt-4">
+          <nav className="text-sm breadcrumbs">
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item">
+                <a href="/dashboard" className="link">
+                  Escritorio
+                </a>
+              </li>
+              <li className="breadcrumb-item active">
+                <span>Lista de animes</span>
+              </li>
+            </ol>
+          </nav>
+          <button className="btn btn-wide btn-sm btn-primary mx-auto" onClick={() => setModalOpen(true)}>
+            Agregar Nuevo Anime
           </button>
+          <div className="flex items-center ml-4">
+            <input
+              type="text"
+              placeholder="Buscar por nombre..."
+              className="input input-bordered input-primary input-sm w-full max-w-xs"
+              value={columnFilters.find((filter) => filter.id === "nombre")?.value || ""}
+              onChange={(e) => setColumnFilters([{ id: "nombre", value: e.target.value }])}
+            />
+            <button className="btn btn-sm btn-primary ml-2" onClick={handleClearSearch}>
+              Borrar
+            </button>
+          </div>
         </div>
       </div>
       <div className="overflow-x-auto w-full">
@@ -189,7 +194,7 @@ export default function AnimePage() {
             )}
           </tbody>
         </table>
-        <div className="flex justify-center">
+        <div className="flex justify-center mt-4">
           <div className="join">
             <button className="join-item btn btn-outline" onClick={() => table.setPageIndex(0)}>
               Primera
