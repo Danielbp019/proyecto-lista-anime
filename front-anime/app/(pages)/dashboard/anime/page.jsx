@@ -1,7 +1,7 @@
 // (pages)/dashboard/anime/page.jsx
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -11,29 +11,43 @@ import {
 } from "@tanstack/react-table";
 import { getAnimes, createAnime, updateAnime, deleteAnime } from "@/app/services/animesService";
 import AnimeModal from "@/app/components/AnimeModal";
+import ConfirmDialog from "@/app/components/ConfirmDialog";
 
 export default function AnimePage() {
   const [data, setData] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [animeToEdit, setAnimeToEdit] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [animeToDelete, setAnimeToDelete] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchAnimes = async () => {
+    setLoading(true); // Establece el estado de carga a verdadero antes de la solicitud
     const result = await getAnimes();
     if (result.success) {
       setData(result.data);
     } else {
       console.error("Error obteniendo animes:", result.error);
     }
+    setLoading(false); // Establece el estado de carga a falso después de la solicitud
   };
 
-  const handleDelete = async (id) => {
-    const result = await deleteAnime(id);
+  const handleDelete = (id) => {
+    setAnimeToDelete(id);
+    setConfirmDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    setConfirmDialogOpen(false);
+    const result = await deleteAnime(animeToDelete);
     if (result.success) {
-      fetchAnimes();
+      await fetchAnimes(); // Asegura que fetchAnimes se llama de manera correcta
+      setColumnFilters([]); // Limpia el campo de búsqueda
     } else {
       alert(`Error al eliminar el anime: ${result.error}`);
     }
+    setAnimeToDelete(null);
   };
 
   const handleEdit = (anime) => {
@@ -138,7 +152,16 @@ export default function AnimePage() {
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.length > 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan={columns.length}>
+                  <div className="flex justify-center items-center">
+                    Cargando datos
+                    <span className="ml-4 loading loading-dots loading-lg text-warning"></span>
+                  </div>
+                </td>
+              </tr>
+            ) : table.getRowModel().rows.length > 0 ? (
               table.getRowModel().rows.map((row) => (
                 <tr key={row.id}>
                   {row.getVisibleCells().map((cell) => (
@@ -151,10 +174,7 @@ export default function AnimePage() {
             ) : (
               <tr>
                 <td colSpan={columns.length}>
-                  <div className="flex justify-center items-center">
-                    Cargando datos
-                    <span className="ml-4 loading loading-dots loading-lg text-warning"></span>
-                  </div>
+                  <div className="flex justify-center items-center">No se encontraron datos</div>
                 </td>
               </tr>
             )}
@@ -197,6 +217,12 @@ export default function AnimePage() {
         anime={animeToEdit}
         onClose={handleCloseModal} // Utiliza la función para cerrar
         onSave={handleSave}
+      />
+      <ConfirmDialog
+        isOpen={confirmDialogOpen}
+        message="¿Estás seguro de que deseas eliminar este anime? Esta acción no se puede deshacer."
+        onConfirm={confirmDelete}
+        onCancel={() => setConfirmDialogOpen(false)}
       />
     </div>
   );

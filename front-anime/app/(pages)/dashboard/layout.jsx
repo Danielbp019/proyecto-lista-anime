@@ -126,7 +126,7 @@ export default function DashboardLayout({ children }) {
                     </a>
                   </li>
                   <li>
-                    <button onClick={handleLogout} className="btn btn-error btn-sm text-black">
+                    <button onClick={handleLogout} className="btn btn-error btn-sm">
                       <i className="bi bi-box-arrow-right"></i> {/* Icono de cerrar sesión */}
                       Cerrar Sesión
                     </button>
