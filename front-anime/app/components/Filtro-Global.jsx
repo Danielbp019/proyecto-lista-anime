@@ -1,4 +1,5 @@
 // components/AnimeTable.jsx
+/* Componete de tabla de anime, usa un filtro global para buscar en toda la tabla que renderiza. */
 
 import { useEffect, useState } from "react";
 import {
@@ -14,14 +15,10 @@ export default function AnimeTable() {
   // Estado react - Pasar los datos de la consulta a la tabla.
   const [data, setData] = useState([]);
   // Estado react - Buscador.
-  const [columnFilters, setColumnFilters] = useState([]);
+  const [filtering, setFiltering] = useState("");
 
   const columns = [
-    {
-      accessorKey: "nombre",
-      header: "Nombre",
-      filterFn: "includesString", // Usa un filtro predefinido
-    },
+    { accessorKey: "nombre", header: "Nombre" },
     { accessorKey: "numero_capitulos", header: "Capítulos" },
     {
       accessorKey: "visto",
@@ -67,21 +64,20 @@ export default function AnimeTable() {
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     state: {
-      columnFilters,
+      globalFilter: filtering,
     },
-    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setFiltering,
   });
 
   return (
     <div className="overflow-x-auto w-full">
+      {/* ver si puedo mover el buscador al page */}
       <input
         type="text"
-        placeholder="Buscar por nombre..."
+        placeholder="Buscar por nombre"
         className="input input-bordered w-full max-w-xs mb-4"
-        value={columnFilters.find((filter) => filter.id === "nombre")?.value || ""}
-        onChange={
-          (e) => setColumnFilters([{ id: "nombre", value: e.target.value }]) // Filtrar solo la columna "nombre"
-        }
+        value={filtering}
+        onChange={(e) => setFiltering(e.target.value)}
       />
       <table className="table w-full">
         <thead>
