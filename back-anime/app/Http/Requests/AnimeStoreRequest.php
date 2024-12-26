@@ -26,7 +26,7 @@ class AnimeStoreRequest extends FormRequest
             'nombre' => ['required', 'string', 'max:255'],
             'numero_capitulos' => ['required', 'integer', 'min:1'],
             'visto' => ['required', 'boolean'],
-            'comentarios' => ['nullable', 'string', 'max:500']
+            'comentarios' => ['nullable', 'string', 'max:250']
         ];
     }
 }

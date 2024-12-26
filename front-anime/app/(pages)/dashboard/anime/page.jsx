@@ -63,7 +63,7 @@ export default function AnimePage() {
     if (result.success) {
       setModalOpen(false); // Cerrar modal al guardar
       setAnimeToEdit(null); // Limpiar selección
-      fetchAnimes();
+      await fetchAnimes();
     } else {
       alert(`Error al guardar el anime: ${result.error}`);
     }
@@ -135,7 +135,10 @@ export default function AnimePage() {
               </li>
             </ol>
           </nav>
-          <button className="btn btn-wide btn-sm btn-primary mx-auto" onClick={() => setModalOpen(true)}>
+          <button
+            className="btn btn-wide btn-sm btn-primary mx-auto"
+            onClick={() => setModalOpen(true)}
+          >
             Agregar Nuevo Anime
           </button>
           <div className="flex items-center ml-4">
@@ -228,10 +231,12 @@ export default function AnimePage() {
         </div>
       </div>
       <AnimeModal
-        anime={animeToEdit}
-        onClose={handleCloseModal} // Utiliza la función para cerrar
-        onSave={handleSave}
+        isOpen={isModalOpen} // Asegúrate de que este estado controle la visibilidad
+        anime={animeToEdit} // Datos del anime a editar, o null para un nuevo anime
+        onClose={handleCloseModal} // Función para cerrar el modal
+        onSave={handleSave} // Función para guardar el anime
       />
+
       <ConfirmDialog
         isOpen={confirmDialogOpen}
         message="¿Estás seguro de que deseas eliminar este anime? Esta acción no se puede deshacer."
