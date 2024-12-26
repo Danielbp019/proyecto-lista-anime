@@ -10,6 +10,7 @@ export default function AnimeModal({ isOpen, anime, onClose, onSave }) {
     visto: 0,
     comentarios: "",
   });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (anime) {
@@ -27,18 +28,32 @@ export default function AnimeModal({ isOpen, anime, onClose, onSave }) {
 
   const handleChange = (key, value) => {
     setFormData({ ...formData, [key]: value });
+    setErrors({ ...errors, [key]: "" }); // Limpiar el mensaje de error del campo modificado
+  };
+
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.nombre.trim()) {
+      newErrors.nombre = "El nombre no puede estar vacío.";
+    }
+    if (formData.numero_capitulos < 1) {
+      newErrors.numero_capitulos = "El número de capítulos debe ser mayor a 0.";
+    }
+    return newErrors;
   };
 
   const handleSave = () => {
-    if (!formData.nombre.trim()) {
-      alert("El nombre no puede estar vacío.");
-      return;
-    }
-    if (formData.numero_capitulos < 1) {
-      alert("El número de capítulos debe ser mayor a 0.");
+    const newErrors = validate();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
     onSave(formData);
+  };
+
+  const handleCancel = () => {
+    setErrors({});
+    onClose();
   };
 
   if (!isOpen) return null; // Asegurarse de no renderizar el modal si no está abierto.
@@ -58,6 +73,7 @@ export default function AnimeModal({ isOpen, anime, onClose, onSave }) {
             onChange={(e) => handleChange("nombre", e.target.value)}
             required
           />
+          {errors.nombre && <span className="text-error">{errors.nombre}</span>}
         </div>
         <div className="form-control">
           <label className="label">
@@ -73,6 +89,7 @@ export default function AnimeModal({ isOpen, anime, onClose, onSave }) {
             }}
             min={1} // Asegura que el valor no sea menor a 1
           />
+          {errors.numero_capitulos && <span className="text-error">{errors.numero_capitulos}</span>}
         </div>
         <div className="form-control">
           <label className="label">
@@ -108,7 +125,7 @@ export default function AnimeModal({ isOpen, anime, onClose, onSave }) {
           <button className="btn btn-primary" onClick={handleSave}>
             Guardar
           </button>
-          <button className="btn" onClick={onClose}>
+          <button className="btn" onClick={handleCancel}>
             Cancelar
           </button>
         </div>
