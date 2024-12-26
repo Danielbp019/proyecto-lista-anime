@@ -1,4 +1,4 @@
-// services/authService.js
+// services/authService.jsx
 import apiClient from "./axiosConfig";
 
 export const login = async (data) => {

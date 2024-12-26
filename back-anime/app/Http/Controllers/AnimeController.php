@@ -8,6 +8,7 @@ use App\Models\AnimeModel;
 // Validaciones
 use App\Http\Requests\AnimeStoreRequest;
 use App\Http\Requests\AnimeUpdateRequest;
+use Illuminate\Support\Carbon;
 
 class AnimeController extends Controller
 {
@@ -25,6 +26,7 @@ class AnimeController extends Controller
             'comentarios',
             'fecha_actualizacion'
         )
+            ->orderBy('nombre', 'asc')
             ->get();
         return response()->json($anime);
     }
@@ -41,7 +43,7 @@ class AnimeController extends Controller
                 'numero_capitulos' => trim($request['numero_capitulos']),
                 'visto' => $request['visto'],
                 'comentarios' => trim($request['comentarios']),
-                'fecha_actualizacion' => $request['fecha_actualizacion'],
+                'fecha_actualizacion' => Carbon::now()->format('Y-m-d'),
             ]);
 
             return response()->json(['success' => true, 'nuevoAnime' => $nuevoAnime], 201);
@@ -73,22 +75,31 @@ class AnimeController extends Controller
         //
         try {
             $editarAnime = AnimeModel::findOrFail($id);
-            // El metodo has verifica si un campo esta presente en la solicitud
+            // El método has verifica si un campo está presente en la solicitud
+            $modificado = false;
+
             if ($request->has('nombre')) {
                 $editarAnime->nombre = trim($request['nombre']);
+                $modificado = true;
             }
             if ($request->has('numero_capitulos')) {
                 $editarAnime->numero_capitulos = trim($request['numero_capitulos']);
+                $modificado = true;
             }
             if ($request->has('visto')) {
                 $editarAnime->visto = $request['visto'];
+                $modificado = true;
             }
             if ($request->has('comentarios')) {
                 $editarAnime->comentarios = trim($request['comentarios']);
+                $modificado = true;
             }
-            if ($request->has('fecha_actualizacion')) {
-                $editarAnime->fecha_actualizacion = $request['fecha_actualizacion'];
+
+            // Si alguno de los campos se ha modificado, actualizar la fecha_actualizacion
+            if ($modificado) {
+                $editarAnime->fecha_actualizacion = Carbon::now()->format('Y-m-d');
             }
+
             $editarAnime->save();
 
             return response()->json(['success' => true, 'editarAnime' => $editarAnime], 200);
