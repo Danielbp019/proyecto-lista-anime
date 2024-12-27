@@ -11,8 +11,15 @@ export default function DashboardLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Sidebar abierto por defecto
   const [isThemeDropdownOpen, setIsThemeDropdownOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-  const [selectedTheme, setSelectedTheme] = useState("light");
+  const [selectedTheme, setSelectedTheme] = useState(() => "");
   const router = useRouter();
+
+  useEffect(() => {
+    // Configurar el tema inicial desde el almacenamiento local
+    const storedTheme = localStorage.getItem("theme") || "dark";
+    setSelectedTheme(storedTheme);
+    document.documentElement.setAttribute("data-theme", storedTheme);
+  }, []);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -59,6 +66,7 @@ export default function DashboardLayout({ children }) {
   const handleThemeChange = (theme) => {
     setSelectedTheme(theme);
     document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
   };
 
   useEffect(() => {
@@ -111,7 +119,7 @@ export default function DashboardLayout({ children }) {
             </button>
             <div className="flex items-center text-primary">
               <Image src="/logo.png" alt="Logo" className="h-6 w-auto" width={50} height={50} />
-              <span className="font-bold ml-2">DB Admin</span>
+              <span className="font-bold ml-2">DB Admin - Proyecto Lista Anime</span>
             </div>
           </div>
           {error && <p className="text-error text-sm text-center mb-4">{error}</p>}
@@ -167,6 +175,7 @@ export default function DashboardLayout({ children }) {
                 </ul>
               )}
             </div>
+            <div className="badge badge-primary">Tema en uso: {selectedTheme || "Cargando..."}</div>
             <div className="dropdown dropdown-end">
               <label
                 tabIndex={0}

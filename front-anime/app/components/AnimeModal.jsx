@@ -125,7 +125,7 @@ export default function AnimeModal({ isOpen, anime, onClose, onSave }) {
           <button className="btn btn-primary" onClick={handleSave}>
             Guardar
           </button>
-          <button className="btn" onClick={handleCancel}>
+          <button className="btn btn-secondary" onClick={handleCancel}>
             Cancelar
           </button>
         </div>
