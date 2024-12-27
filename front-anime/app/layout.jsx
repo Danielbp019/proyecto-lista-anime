@@ -1,3 +1,4 @@
+// layout.jsx
 import { Roboto, Nunito } from "next/font/google";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./globals.css";
@@ -21,7 +22,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es">
+    <html lang="es" data-theme="dark">
       <body className={`${roboto.variable} ${nunito.variable} antialiased`}>{children}</body>
     </html>
   );

@@ -9,21 +9,30 @@ import { logout } from "@/app/services/authService";
 export default function DashboardLayout({ children }) {
   const [error, setError] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Sidebar abierto por defecto
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isThemeDropdownOpen, setIsThemeDropdownOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState("light");
   const router = useRouter();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+  const toggleThemeDropdown = () => {
+    setIsThemeDropdownOpen(!isThemeDropdownOpen);
+    setIsProfileDropdownOpen(false); // Cierra el dropdown de perfil si está abierto
+  };
+
+  const toggleProfileDropdown = () => {
+    setIsProfileDropdownOpen(!isProfileDropdownOpen);
+    setIsThemeDropdownOpen(false); // Cierra el dropdown de temas si está abierto
   };
 
   const handleOutsideClick = (event) => {
     const target = event.target;
     if (!target.closest("aside") && !target.closest("button") && !target.closest(".dropdown")) {
-      setIsDropdownOpen(false);
+      setIsThemeDropdownOpen(false);
+      setIsProfileDropdownOpen(false);
     }
   };
 
@@ -45,6 +54,11 @@ export default function DashboardLayout({ children }) {
       console.error("Error al cerrar sesión:", error);
       setError("Error al cerrar sesión");
     }
+  };
+
+  const handleThemeChange = (theme) => {
+    setSelectedTheme(theme);
+    document.documentElement.setAttribute("data-theme", theme);
   };
 
   useEffect(() => {
@@ -103,7 +117,62 @@ export default function DashboardLayout({ children }) {
           {error && <p className="text-error text-sm text-center mb-4">{error}</p>}
           <nav className="flex items-center space-x-4">
             <div className="dropdown dropdown-end">
-              <label tabIndex={0} className="btn btn-ghost btn-circle" onClick={toggleDropdown}>
+              <button
+                className="btn btn-ghost btn-circle dropdown-toggle"
+                tabIndex={0}
+                onClick={toggleThemeDropdown}
+              >
+                Temas
+              </button>
+              {isThemeDropdownOpen && (
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+                >
+                  {[
+                    "light",
+                    "dark",
+                    "cupcake",
+                    "bumblebee",
+                    "emerald",
+                    "corporate",
+                    "synthwave",
+                    "retro",
+                    "cyberpunk",
+                    "valentine",
+                    "halloween",
+                    "garden",
+                    "forest",
+                    "aqua",
+                    "lofi",
+                    "pastel",
+                    "fantasy",
+                    "wireframe",
+                    "black",
+                    "luxury",
+                    "dracula",
+                    "cmyk",
+                    "autumn",
+                    "business",
+                    "acid",
+                    "lemonade",
+                    "night",
+                    "coffee",
+                    "winter",
+                  ].map((theme) => (
+                    <li key={theme}>
+                      <button onClick={() => handleThemeChange(theme)}>{theme}</button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div className="dropdown dropdown-end">
+              <label
+                tabIndex={0}
+                className="btn btn-ghost btn-circle"
+                onClick={toggleProfileDropdown}
+              >
                 <div className="w-10 rounded-full">
                   <Image
                     src="/profile-img.jpg"
@@ -114,7 +183,7 @@ export default function DashboardLayout({ children }) {
                   />
                 </div>
               </label>
-              {isDropdownOpen && (
+              {isProfileDropdownOpen && (
                 <ul
                   tabIndex={0}
                   className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
