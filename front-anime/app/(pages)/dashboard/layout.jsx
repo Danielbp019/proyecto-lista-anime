@@ -126,7 +126,7 @@ export default function DashboardLayout({ children }) {
           <nav className="flex items-center space-x-4">
             <div className="dropdown dropdown-end">
               <button
-                className="btn btn-ghost btn-circle dropdown-toggle"
+                className="btn btn-ghost btn-circle dropdown-toggle bg-gray-200 text-black"
                 tabIndex={0}
                 onClick={toggleThemeDropdown}
               >
@@ -175,6 +175,7 @@ export default function DashboardLayout({ children }) {
                 </ul>
               )}
             </div>
+
             <div className="badge badge-primary">Tema en uso: {selectedTheme || "Cargando..."}</div>
             <div className="dropdown dropdown-end">
               <label
