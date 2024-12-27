@@ -39,10 +39,10 @@ class AnimeController extends Controller
         //
         try {
             $nuevoAnime = AnimeModel::create([
-                'nombre' => trim($request['nombre']),
+                'nombre' => ucwords(strtolower(trim($request['nombre']))),
                 'numero_capitulos' => trim($request['numero_capitulos']),
                 'visto' => $request['visto'],
-                'comentarios' => trim($request['comentarios']),
+                'comentarios' => $this->mb_ucfirst(trim($request['comentarios']), "UTF-8", true),
                 'fecha_actualizacion' => Carbon::now()->format('Y-m-d'),
             ]);
 
@@ -75,31 +75,13 @@ class AnimeController extends Controller
         //
         try {
             $editarAnime = AnimeModel::findOrFail($id);
-            // El método has verifica si un campo está presente en la solicitud
-            $modificado = false;
-
-            if ($request->has('nombre')) {
-                $editarAnime->nombre = trim($request['nombre']);
-                $modificado = true;
-            }
-            if ($request->has('numero_capitulos')) {
-                $editarAnime->numero_capitulos = trim($request['numero_capitulos']);
-                $modificado = true;
-            }
-            if ($request->has('visto')) {
-                $editarAnime->visto = $request['visto'];
-                $modificado = true;
-            }
-            if ($request->has('comentarios')) {
-                $editarAnime->comentarios = trim($request['comentarios']);
-                $modificado = true;
-            }
-
-            // Si alguno de los campos se ha modificado, actualizar la fecha_actualizacion
-            if ($modificado) {
-                $editarAnime->fecha_actualizacion = Carbon::now()->format('Y-m-d');
-            }
-
+            $editarAnime->fill([
+                'nombre' => ucwords(strtolower(trim($request['nombre']))),
+                'numero_capitulos' => trim($request['numero_capitulos']),
+                'visto' => $request['visto'],
+                'comentarios' => $this->mb_ucfirst(trim($request['comentarios']), "UTF-8", true),
+                'fecha_actualizacion' => Carbon::now()->format('Y-m-d'),
+            ]);
             $editarAnime->save();
 
             return response()->json(['success' => true, 'editarAnime' => $editarAnime], 200);
@@ -122,5 +104,35 @@ class AnimeController extends Controller
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
+    }
+
+    /*     Convertir solo la primera letra en mayuscula de una texto o parrafo ignorando si existen numeros antes.
+    echo mb_ucfirst("01 arenga"); Output: "01 Arenga"
+    echo mb_ucfirst("123 ejemplo de texto"); Output: "123 Ejemplo de texto"
+    echo mb_ucfirst("sin numeros"); Output: "Sin numeros"
+    echo mb_ucfirst("123456"); Output: "123456" */
+
+    public function mb_ucfirst($str, $encoding = "UTF-8", $lower_str_end = false)
+    {
+        // Buscar la primera letra alfabética
+        preg_match('/[^\d\s]/u', $str, $matches, PREG_OFFSET_CAPTURE);
+
+        // Si no hay letras alfabéticas, retornar la cadena original
+        if (empty($matches)) {
+            return $str;
+        }
+
+        $first_letter_pos = $matches[0][1];
+        $first_letter = mb_strtoupper(mb_substr($str, $first_letter_pos, 1, $encoding), $encoding);
+
+        // Partes iniciales y finales de la cadena
+        $before_letter = mb_substr($str, 0, $first_letter_pos, $encoding);
+        $after_letter = mb_substr($str, $first_letter_pos + 1, null, $encoding);
+
+        if ($lower_str_end) {
+            $after_letter = mb_strtolower($after_letter, $encoding);
+        }
+
+        return $before_letter . $first_letter . $after_letter;
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         //
         Schema::create('animes', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre')->comment('Nombre del anime en español')->nullable(false);
+            $table->string('nombre')->comment('Nombre del anime en español')->nullable(false)->unique();
             $table->integer('numero_capitulos')->comment('Número de capítulos')->nullable(false);
             $table->boolean('visto')->default(1)->comment('Si el anime terminó es 1, de lo contrario es 0');
             $table->text('comentarios')->nullable()->comment('Expresate para que nunca lo olvides');

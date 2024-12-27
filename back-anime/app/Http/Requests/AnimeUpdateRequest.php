@@ -23,9 +23,9 @@ class AnimeUpdateRequest extends FormRequest
     {
         return [
             //
-            'nombre' => ['sometimes', 'required', 'string', 'max:255'],
-            'numero_capitulos' => ['sometimes', 'required', 'integer', 'min:1'],
-            'visto' => ['sometimes', 'required', 'boolean'],
+            'nombre' => ['sometimes', 'string', 'max:255'],
+            'numero_capitulos' => ['sometimes', 'integer', 'min:1'],
+            'visto' => ['sometimes', 'boolean'],
             'comentarios' => ['nullable', 'string']
         ];
     }
