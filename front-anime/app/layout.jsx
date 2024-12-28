@@ -1,18 +1,12 @@
 // layout.jsx
-import { Roboto, Nunito } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import "./globals.css";
+import "@/app/styles/globals.css";
 
 const roboto = Roboto({
   variable: "--font-roboto",
   subsets: ["latin"],
   weight: ["300", "400", "500", "700"],
-});
-
-const nunito = Nunito({
-  variable: "--font-nunito",
-  subsets: ["latin"],
-  weight: ["400"],
 });
 
 export const metadata = {
@@ -22,8 +16,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es" data-theme="dark">
-      <body className={`${roboto.variable} ${nunito.variable} antialiased`}>{children}</body>
+    <html lang="es" data-theme="">
+      <body className={`${roboto.variable} antialiased`}>{children}</body>
     </html>
   );
 }
