@@ -30,7 +30,7 @@ export const getExcelcsv = async (id) => {
 export const createExcelcsv = async (data) => {
   try {
     const formData = new FormData();
-    formData.append("file", data);
+    formData.append("csv-file", data); // Asegurarse de que el nombre del campo coincide con el backend
 
     const response = await apiClient.post("/excelcsv", formData, {
       headers: {

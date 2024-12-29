@@ -7,7 +7,7 @@ export const getAnimes = async () => {
     const response = await apiClient.get("/animes");
     return { success: true, data: response.data };
   } catch (error) {
-    console.error("Error obteniendo animes:", error.message);
+    //console.error("Error obteniendo animes:", error.message);
     return { success: false, error: "No se pudo obtener la lista de animes." };
   }
 };
@@ -18,7 +18,7 @@ export const createAnime = async (data) => {
     const response = await apiClient.post("/animes", data);
     return { success: true, data: response.data };
   } catch (error) {
-    console.error("Error creando anime:", error.message);
+    //console.error("Error creando anime:", error.message);
     return { success: false, error: "No se pudo crear el anime." };
   }
 };
@@ -29,7 +29,7 @@ export const updateAnime = async (id, data) => {
     const response = await apiClient.put(`/animes/${id}`, data);
     return { success: true, data: response.data };
   } catch (error) {
-    console.error("Error actualizando anime:", error.message);
+    //console.error("Error actualizando anime:", error.message);
     return { success: false, error: "No se pudo actualizar el anime." };
   }
 };
@@ -40,7 +40,7 @@ export const deleteAnime = async (id) => {
     await apiClient.delete(`/animes/${id}`);
     return { success: true };
   } catch (error) {
-    console.error("Error borrando anime:", error.message);
+    //console.error("Error borrando anime:", error.message);
     return { success: false, error: "No se pudo eliminar el anime." };
   }
 };

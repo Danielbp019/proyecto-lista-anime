@@ -5,11 +5,14 @@ import DashboardLayout from "@/app/layouts/DashboardLayout";
 import { useState, useEffect } from "react";
 import { getExcelcsv, createExcelcsv, deleteExcelcsv } from "@/app/services/csvanimeService";
 import ConfirmDialog from "@/app/components/ConfirmDialog";
+import AlertSuccess from "@/app/components/AlertSuccess";
 import "@/app/styles/globals.css";
 
 export default function CsvanimePage() {
   const [file, setFile] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false); // Estado para el diálogo de confirmación
+  const [isAlertOpen, setIsAlertOpen] = useState(false); // Estado para el alert de éxito
+  const [alertMessage, setAlertMessage] = useState(""); // Mensaje para el alert de éxito
   const [countdown, setCountdown] = useState(0); // Estado para el contador
 
   const handleFileChange = (e) => {
@@ -19,7 +22,10 @@ export default function CsvanimePage() {
   const handleUpload = async () => {
     if (file) {
       await createExcelcsv(file);
-      alert("Archivo CSV subido con éxito");
+      setAlertMessage("Archivo CSV subido con éxito");
+      setIsAlertOpen(true);
+      setFile(null); // Limpiar el campo de subida de archivos
+      document.getElementById("fileInput").value = null; // Limpiar el valor del input de archivo
     }
   };
 
@@ -32,7 +38,8 @@ export default function CsvanimePage() {
 
   const handleDelete = async (id) => {
     await deleteExcelcsv(id);
-    alert("Tabla anime truncada con éxito");
+    setAlertMessage("Tabla anime truncada con éxito");
+    setIsAlertOpen(true);
     setIsDialogOpen(false); // Cerrar el diálogo después de confirmar
   };
 
@@ -42,6 +49,10 @@ export default function CsvanimePage() {
 
   const closeConfirmDialog = () => {
     setIsDialogOpen(false);
+  };
+
+  const closeAlert = () => {
+    setIsAlertOpen(false);
   };
 
   useEffect(() => {
@@ -78,7 +89,14 @@ export default function CsvanimePage() {
         <div className="card w-full bg-base-100 shadow-xl">
           <div className="card-body shadow-t">
             <h2 className="card-title">Subir Archivo CSV</h2>
-            <input type="file" accept=".csv" onChange={handleFileChange} className="input input-bordered w-full" />
+            <input
+              id="fileInput" // Añadir el id al input de archivo
+              type="file"
+              accept=".csv"
+              onChange={handleFileChange}
+              className="input input-bordered w-full"
+              required
+            />
             <button onClick={handleUpload} className="btn btn-primary mt-4">
               Subir CSV
             </button>
@@ -113,6 +131,9 @@ export default function CsvanimePage() {
           onConfirm={() => handleDelete(1)}
           onCancel={closeConfirmDialog}
         />
+
+        {/* Alert de éxito */}
+        <AlertSuccess isOpen={isAlertOpen} message={alertMessage} onClose={closeAlert} />
       </div>
     </DashboardLayout>
   );
