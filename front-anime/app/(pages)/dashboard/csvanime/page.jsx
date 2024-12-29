@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { getExcelcsv, createExcelcsv, deleteExcelcsv } from "@/app/services/csvanimeService";
 import ConfirmDialog from "@/app/components/ConfirmDialog";
 import AlertSuccess from "@/app/components/AlertSuccess";
+import AlertDanger from "@/app/components/AlertDanger"; // Import AlertDanger
 import "@/app/styles/globals.css";
 
 export default function CsvanimePage() {
@@ -13,6 +14,8 @@ export default function CsvanimePage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false); // Estado para el diálogo de confirmación
   const [isAlertOpen, setIsAlertOpen] = useState(false); // Estado para el alert de éxito
   const [alertMessage, setAlertMessage] = useState(""); // Mensaje para el alert de éxito
+  const [isErrorOpen, setIsErrorOpen] = useState(false); // Estado para el alert de error
+  const [errorMessage, setErrorMessage] = useState(""); // Mensaje para el alert de error
   const [countdown, setCountdown] = useState(0); // Estado para el contador
 
   const handleFileChange = (e) => {
@@ -21,26 +24,41 @@ export default function CsvanimePage() {
 
   const handleUpload = async () => {
     if (file) {
-      await createExcelcsv(file);
-      setAlertMessage("Archivo CSV subido con éxito");
-      setIsAlertOpen(true);
-      setFile(null); // Limpiar el campo de subida de archivos
-      document.getElementById("fileInput").value = null; // Limpiar el valor del input de archivo
+      try {
+        await createExcelcsv(file);
+        setAlertMessage("Archivo CSV subido con éxito");
+        setIsAlertOpen(true);
+        setFile(null); // Limpiar el campo de subida de archivos
+        document.getElementById("fileInput").value = null; // Limpiar el valor del input de archivo
+      } catch (error) {
+        setErrorMessage("Error al subir el archivo CSV. Intenta nuevamente.");
+        setIsErrorOpen(true); // Open error alert
+      }
     }
   };
 
   const handleDownload = async (id) => {
     if (countdown === 0) {
-      await getExcelcsv(id);
-      setCountdown(10); // Iniciar el contador de 10 segundos
+      try {
+        await getExcelcsv(id);
+        setCountdown(10); // Iniciar el contador de 10 segundos
+      } catch (error) {
+        setErrorMessage("Error al descargar el archivo CSV.");
+        setIsErrorOpen(true); // Open error alert
+      }
     }
   };
 
   const handleDelete = async (id) => {
-    await deleteExcelcsv(id);
-    setAlertMessage("Tabla anime truncada con éxito");
-    setIsAlertOpen(true);
-    setIsDialogOpen(false); // Cerrar el diálogo después de confirmar
+    try {
+      await deleteExcelcsv(id);
+      setAlertMessage("Tabla anime truncada con éxito");
+      setIsAlertOpen(true);
+      setIsDialogOpen(false); // Cerrar el diálogo después de confirmar
+    } catch (error) {
+      setErrorMessage("Error al vaciar la tabla de anime.");
+      setIsErrorOpen(true); // Open error alert
+    }
   };
 
   const openConfirmDialog = () => {
@@ -53,6 +71,10 @@ export default function CsvanimePage() {
 
   const closeAlert = () => {
     setIsAlertOpen(false);
+  };
+
+  const closeErrorAlert = () => {
+    setIsErrorOpen(false);
   };
 
   useEffect(() => {
@@ -134,6 +156,9 @@ export default function CsvanimePage() {
 
         {/* Alert de éxito */}
         <AlertSuccess isOpen={isAlertOpen} message={alertMessage} onClose={closeAlert} />
+
+        {/* Alert de error */}
+        <AlertDanger isOpen={isErrorOpen} message={errorMessage} onClose={closeErrorAlert} />
       </div>
     </DashboardLayout>
   );

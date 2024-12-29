@@ -12,6 +12,8 @@ import {
 import { getAnimes, createAnime, updateAnime, deleteAnime } from "@/app/services/animesService";
 import AnimeModal from "@/app/components/AnimeModal";
 import ConfirmDialog from "@/app/components/ConfirmDialog";
+import AlertSuccess from "@/app/components/AlertSuccess"; // Importa el componente de alerta de éxito
+import AlertDanger from "@/app/components/AlertDanger"; // Importa el componente de alerta de error
 import DashboardLayout from "@/app/layouts/DashboardLayout";
 
 export default function AnimePage() {
@@ -22,16 +24,21 @@ export default function AnimePage() {
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [animeToDelete, setAnimeToDelete] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [alertSuccessOpen, setAlertSuccessOpen] = useState(false); // Estado para controlar la alerta de éxito
+  const [alertDangerOpen, setAlertDangerOpen] = useState(false); // Estado para controlar la alerta de error
+  const [alertMessage, setAlertMessage] = useState(""); // Estado para el mensaje de la alerta
 
   const fetchAnimes = async () => {
-    setLoading(true); // Establece el estado de carga a verdadero antes de la solicitud
+    setLoading(true);
     const result = await getAnimes();
     if (result.success) {
       setData(result.data);
     } else {
       console.error("Error obteniendo animes:", result.error);
+      setAlertMessage(`Error al obtener los animes: ${result.error}`);
+      setAlertDangerOpen(true); // Mostrar la alerta de error
     }
-    setLoading(false); // Establece el estado de carga a falso después de la solicitud
+    setLoading(false);
   };
 
   const handleDelete = (id) => {
@@ -43,10 +50,13 @@ export default function AnimePage() {
     setConfirmDialogOpen(false);
     const result = await deleteAnime(animeToDelete);
     if (result.success) {
-      await fetchAnimes(); // Asegura que fetchAnimes se llama de manera correcta
-      setColumnFilters([]); // Limpia el campo de búsqueda
+      await fetchAnimes();
+      setColumnFilters([]);
+      setAlertMessage("Anime eliminado con éxito");
+      setAlertSuccessOpen(true);
     } else {
-      alert(`Error al eliminar el anime: ${result.error}`);
+      setAlertMessage(`Error al eliminar el anime: ${result.error}`);
+      setAlertDangerOpen(true); // Mostrar la alerta de error
     }
     setAnimeToDelete(null);
   };
@@ -60,21 +70,24 @@ export default function AnimePage() {
     const result = animeToEdit ? await updateAnime(animeToEdit.id, anime) : await createAnime(anime);
 
     if (result.success) {
-      setModalOpen(false); // Cerrar modal al guardar
-      setAnimeToEdit(null); // Limpiar selección
+      setModalOpen(false);
+      setAnimeToEdit(null);
       await fetchAnimes();
+      setAlertMessage(animeToEdit ? "Anime actualizado con éxito" : "Anime creado con éxito");
+      setAlertSuccessOpen(true);
     } else {
-      alert(`Error al guardar el anime: ${result.error}`);
+      setAlertMessage(`Error al guardar el anime: ${result.error}`);
+      setAlertDangerOpen(true); // Mostrar la alerta de error
     }
   };
 
   const handleCloseModal = () => {
-    setModalOpen(false); // Cerrar modal
-    setAnimeToEdit(null); // Limpiar selección
+    setModalOpen(false);
+    setAnimeToEdit(null);
   };
 
   const handleClearSearch = () => {
-    setColumnFilters([]); // Limpia el campo de búsqueda
+    setColumnFilters([]);
   };
 
   const columns = [
@@ -223,19 +236,15 @@ export default function AnimePage() {
             </div>
           </div>
         </div>
-        <AnimeModal
-          isOpen={isModalOpen} // Asegúrate de que este estado controle la visibilidad
-          anime={animeToEdit} // Datos del anime a editar, o null para un nuevo anime
-          onClose={handleCloseModal} // Función para cerrar el modal
-          onSave={handleSave} // Función para guardar el anime
-        />
-
+        <AnimeModal isOpen={isModalOpen} anime={animeToEdit} onClose={handleCloseModal} onSave={handleSave} />
         <ConfirmDialog
           isOpen={confirmDialogOpen}
           message="¿Estás seguro de que deseas eliminar este anime? Esta acción no se puede deshacer."
           onConfirm={confirmDelete}
           onCancel={() => setConfirmDialogOpen(false)}
         />
+        <AlertSuccess isOpen={alertSuccessOpen} message={alertMessage} onClose={() => setAlertSuccessOpen(false)} />
+        <AlertDanger isOpen={alertDangerOpen} message={alertMessage} onClose={() => setAlertDangerOpen(false)} />
       </div>
     </DashboardLayout>
   );

@@ -21,8 +21,8 @@ export const getExcelcsv = async (id) => {
     link.click();
     return { success: true };
   } catch (error) {
-    console.error("Error obteniendo excel csv:", error.message);
-    return { success: false, error: "No se pudo obtener el archivo csv." };
+    //console.error("Error obteniendo excel csv:", error.message);
+    return { success: false, error: "Service - No se pudo obtener el archivo csv." };
   }
 };
 
@@ -39,8 +39,8 @@ export const createExcelcsv = async (data) => {
     });
     return { success: true, data: response.data };
   } catch (error) {
-    console.error("Error al subir la lista csv a la tabla:", error.message);
-    return { success: false, error: "No se pudo subir la lista csv a la tabla." };
+    //console.error("Error al subir la lista csv a la tabla:", error.message);
+    return { success: false, error: "Service - No se pudo subir la lista csv a la tabla." };
   }
 };
 
@@ -50,7 +50,7 @@ export const deleteExcelcsv = async (id) => {
     await apiClient.delete(`/excelcsv/${id}`);
     return { success: true };
   } catch (error) {
-    console.error("Error al truncar la tabla anime:", error.message);
-    return { success: false, error: "No se pudo truncar la tabla anime." };
+    //console.error("Error al truncar la tabla anime:", error.message);
+    return { success: false, error: "Service - No se pudo truncar la tabla anime." };
   }
 };
