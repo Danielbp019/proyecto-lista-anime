@@ -2,9 +2,10 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { register } from "@/app/services/authService";
+import AlertSuccess from "@/app/components/AlertSuccess";
+import AlertDanger from "@/app/components/AlertDanger";
 
 const registerSchema = z
   .object({
@@ -32,7 +33,8 @@ export default function Register() {
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+  const [isSuccess, setIsSuccess] = useState(false); // Nuevo estado para el mensaje de éxito
+  const [isError, setIsError] = useState(false); // Nuevo estado para el mensaje de error
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -44,23 +46,33 @@ export default function Register() {
       setIsLoading(true);
       registerSchema.parse(formData); // Validación antes de enviar datos
       await register(formData);
-      router.push("/auth/login");
+      setIsSuccess(true); // Mostrar mensaje de éxito
+      setIsError(false); // Asegurarse de que el mensaje de error no se muestre
     } catch (err) {
       if (err instanceof z.ZodError) {
         setError(err.errors[0].message);
       } else {
         setError("El registro falló. Por favor intente nuevamente.");
       }
+      setIsError(true); // Mostrar mensaje de error
+      setIsSuccess(false); // Asegurarse de que el mensaje de éxito no se muestre
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleCloseSuccess = () => {
+    setIsSuccess(false);
+  };
+
+  const handleCloseError = () => {
+    setIsError(false);
   };
 
   return (
     <div className="flex items-center justify-center h-screen bg-base-200">
       <form onSubmit={handleSubmit} className="bg-base-100 p-8 rounded shadow-md w-96">
         <h1 className="text-xl text-center font-bold mb-6">Registro de nuevo usuario</h1>
-        {error && <p className="text-error text-sm text-center mb-4">{error}</p>}
         <div className="mb-4">
           <label htmlFor="name" className="block font-medium">
             Nombre
@@ -139,6 +151,8 @@ export default function Register() {
           </p>
         </div>
       </form>
+      <AlertSuccess isOpen={isSuccess} message="¡Registro exitoso!" onClose={handleCloseSuccess} />
+      <AlertDanger isOpen={isError} message={error} onClose={handleCloseError} />
     </div>
   );
 }
