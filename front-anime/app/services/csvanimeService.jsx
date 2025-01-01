@@ -7,50 +7,75 @@ export const getExcelcsv = async (id) => {
     const response = await apiClient.get(`/excelcsv/${id}`, {
       responseType: "blob",
     });
+
     // Crear un enlace de descarga
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
 
-    // Obtener la fecha actual en el formato deseado
+    // Obtener la fecha actual en formato YYYY-MM-DD
     const currentDate = new Date().toISOString().split("T")[0];
 
-    // Cambiar el nombre del archivo descargable
+    // Configurar el nombre del archivo descargable
     link.href = url;
     link.setAttribute("download", `Lista-anime_${currentDate}.csv`);
     document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link); // Limpiar el DOM después de la descarga
+
     return { success: true };
   } catch (error) {
-    //console.error("Error obteniendo excel csv:", error.message);
-    return { success: false, error: "Service - No se pudo obtener el archivo csv." };
+    console.error("Error obteniendo archivo CSV (Service):", {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+    });
+    return {
+      success: false,
+      error: error.response?.data?.message || "Service - No se pudo obtener el archivo CSV.",
+    };
   }
 };
 
-// Subir el archivo CSV a la tabla
-export const createExcelcsv = async (data) => {
+// Subir el archivo CSV
+export const createExcelcsv = async (file) => {
   try {
     const formData = new FormData();
-    formData.append("csv-file", data); // Asegurarse de que el nombre del campo coincide con el backend
+    formData.append("csv-file", file); // Nombre del campo debe coincidir con el backend
 
     const response = await apiClient.post("/excelcsv", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
+
     return { success: true, data: response.data };
   } catch (error) {
-    //console.error("Error al subir la lista csv a la tabla:", error.message);
-    return { success: false, error: "Service - No se pudo subir la lista csv a la tabla." };
+    console.error("Error subiendo archivo CSV (Service):", {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+    });
+    return {
+      success: false,
+      error: error.response?.data?.message || "Service - No se pudo subir el archivo CSV.",
+    };
   }
 };
 
-// Truncar la tabla anime
+// Eliminar datos de la tabla
 export const deleteExcelcsv = async (id) => {
   try {
     await apiClient.delete(`/excelcsv/${id}`);
     return { success: true };
   } catch (error) {
-    //console.error("Error al truncar la tabla anime:", error.message);
-    return { success: false, error: "Service - No se pudo truncar la tabla anime." };
+    console.error("Error eliminando datos (Service):", {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+    });
+    return {
+      success: false,
+      error: error.response?.data?.message || "Service - No se pudo eliminar los datos.",
+    };
   }
 };

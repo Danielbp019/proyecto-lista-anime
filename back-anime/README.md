@@ -118,3 +118,9 @@ php artisan optimize:clear
 ### Consideraciones
 
 La tabla "personal_access_tokens" necesita un vaciado cada cierto tiempo por acumulación de historial.
+
+Lista de rutas comando:
+
+```sh
+php artisan route:list
+```

@@ -22,13 +22,13 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Validación de contraseña que exija al menos dos letras mayúsculas, dos letras minúsculas, dos números y una longitud mínima de 12 caracteres
+            // Validación de contraseña que exija al menos dos letras mayúsculas, dos letras minúsculas, dos números y una longitud mínima de 6 caracteres
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => [
                 'required',
                 'string',
-                'min:12',
+                'min:6',
                 'regex:/^(?=(.*[a-z]){2})(?=(.*[A-Z]){2})(?=(.*\d){2}).{12,}$/',
                 'confirmed', // Campo de confirmación
             ],

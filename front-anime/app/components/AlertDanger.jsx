@@ -24,7 +24,7 @@ const AlertDanger = ({ isOpen, message, onClose }) => {
 
   return (
     <div className="fixed bottom-4 right-4 z-50 flex items-center justify-center">
-      <div className="alert alert-danger shadow-lg flex w-auto min-w-max items-center space-x-2">
+      <div className="alert alert-error shadow-lg flex w-auto min-w-max items-center space-x-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -38,7 +38,7 @@ const AlertDanger = ({ isOpen, message, onClose }) => {
         <span>
           {message} (Cierra en {seconds} segundos)
         </span>
-        <button onClick={onClose} className="btn btn-sm btn-danger">
+        <button onClick={onClose} className="btn btn-sm btn-error">
           Cerrar
         </button>
       </div>

@@ -17,18 +17,23 @@ class AnimeController extends Controller
      */
     public function index()
     {
-        // Select.
-        $anime = AnimeModel::select(
-            'id',
-            'nombre',
-            'numero_capitulos',
-            'visto',
-            'comentarios',
-            'fecha_actualizacion'
-        )
-            ->orderBy('nombre', 'asc')
-            ->get();
-        return response()->json($anime);
+        try {
+            // Select.
+            $anime = AnimeModel::select(
+                'id',
+                'nombre',
+                'numero_capitulos',
+                'visto',
+                'comentarios',
+                'fecha_actualizacion'
+            )
+                ->orderBy('nombre', 'asc')
+                ->get();
+
+            return response()->json($anime);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**

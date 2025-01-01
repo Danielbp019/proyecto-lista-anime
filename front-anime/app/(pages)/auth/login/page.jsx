@@ -5,6 +5,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { login } from "@/app/services/authService";
+import AlertDanger from "@/app/components/AlertDanger";
+import { getCsrfToken } from "@/app/services/axiosConfig"; // Asegúrate de tener esta función
 
 const loginSchema = z.object({
   email: z.string().email("Correo electrónico no válido"),
@@ -15,6 +17,7 @@ export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false); // Estado para el mensaje de error
   const router = useRouter();
 
   const handleChange = (e) => {
@@ -25,26 +28,38 @@ export default function Login() {
     e.preventDefault();
     try {
       setIsLoading(true);
-      loginSchema.parse(formData); // Validación antes de enviar datos
+
+      // Validación del formulario
+      loginSchema.parse(formData);
+
+      // Obtener el token CSRF
+      await getCsrfToken();
+
+      // Realizar el login
       const response = await login(formData);
-      document.cookie = `auth_token=${response.data.token}; max-age=${12 * 60 * 60};  HttpOnly; SameSite=Strict`; //Guardar cookie. Secure; se usa cuando se use https
+
+      // Si el login es exitoso, redirigir al dashboard
       router.push("/dashboard");
     } catch (err) {
       if (err instanceof z.ZodError) {
         setError(err.errors[0].message);
       } else {
-        setError("Credenciales incorrectas o cuenta no encontrada.");
+        setError(err.message || "Credenciales incorrectas o cuenta no encontrada.");
       }
+      setIsError(true); // Mostrar mensaje de error
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleCloseError = () => {
+    setIsError(false);
   };
 
   return (
     <div className="flex items-center justify-center h-screen bg-base-200">
       <form onSubmit={handleSubmit} className="bg-base-100 p-8 rounded shadow-md w-96">
         <h1 className="text-xl text-center font-bold mb-6">Iniciar Sesión</h1>
-        {error && <p className="text-error text-sm text-center mb-4">{error}</p>}
         <div className="mb-4">
           <label htmlFor="email" className="block font-medium">
             Correo Electrónico
@@ -95,6 +110,7 @@ export default function Login() {
           </p>
         </div>
       </form>
+      <AlertDanger isOpen={isError} message={error} onClose={handleCloseError} />
     </div>
   );
 }

@@ -7,8 +7,15 @@ export const getAnimes = async () => {
     const response = await apiClient.get("/animes");
     return { success: true, data: response.data };
   } catch (error) {
-    //console.error("Error obteniendo animes:", error.message);
-    return { success: false, error: "Service - No se pudo obtener la lista de animes." };
+    console.error("Error obteniendo animes (Service):", {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+    });
+    return {
+      success: false,
+      error: error.response?.data?.message || "Service - No se pudo obtener la lista de animes.",
+    };
   }
 };
 
@@ -18,8 +25,15 @@ export const createAnime = async (data) => {
     const response = await apiClient.post("/animes", data);
     return { success: true, data: response.data };
   } catch (error) {
-    //console.error("Error creando anime:", error.message);
-    return { success: false, error: "Service - No se pudo crear el anime." };
+    console.error("Error creando anime (Service):", {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+    });
+    return {
+      success: false,
+      error: error.response?.data?.message || "Service - No se pudo crear el anime.",
+    };
   }
 };
 
@@ -29,8 +43,15 @@ export const updateAnime = async (id, data) => {
     const response = await apiClient.put(`/animes/${id}`, data);
     return { success: true, data: response.data };
   } catch (error) {
-    //console.error("Error actualizando anime:", error.message);
-    return { success: false, error: "Service - No se pudo actualizar el anime." };
+    console.error("Error actualizando anime (Service):", {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+    });
+    return {
+      success: false,
+      error: error.response?.data?.message || "Service - No se pudo actualizar el anime.",
+    };
   }
 };
 
@@ -40,7 +61,14 @@ export const deleteAnime = async (id) => {
     await apiClient.delete(`/animes/${id}`);
     return { success: true };
   } catch (error) {
-    //console.error("Error borrando anime:", error.message);
-    return { success: false, error: "Service - No se pudo eliminar el anime." };
+    console.error("Error borrando anime (Service):", {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+    });
+    return {
+      success: false,
+      error: error.response?.data?.message || "Service - No se pudo eliminar el anime.",
+    };
   }
 };

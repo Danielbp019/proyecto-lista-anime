@@ -1,18 +1,18 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\JWTAuthController;
+use App\Http\Middleware\JwtMiddleware;
 use App\Http\Controllers\AnimeController;
 use App\Http\Controllers\ExcelcsvController;
-use App\Http\Controllers\AuthController;
 
-// Rutas para autenticación
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/register', [AuthController::class, 'register']);
+Route::post('/register', [JWTAuthController::class, 'register']);
+Route::post('/login', [JWTAuthController::class, 'login']);
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', [AuthController::class, 'user']);
-    Route::post('/logout', [AuthController::class, 'logout']);
+Route::middleware([JwtMiddleware::class])->group(function () {
+    Route::get('/user', [JWTAuthController::class, 'getUser']);
+    Route::post('/logout', [JWTAuthController::class, 'logout']);
+    Route::post('/refresh', [JWTAuthController::class, 'refresh']); // Añadir ruta para refrescar el token
     Route::apiResource('animes', AnimeController::class);
     Route::apiResource('excelcsv', ExcelcsvController::class)->only(['store', 'show', 'destroy']);
 });

@@ -19,6 +19,7 @@ class ExcelcsvController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * Insertar CSV en la base de datos
      */
     public function store(CsvFileRequest $request)
     {
@@ -79,6 +80,7 @@ class ExcelcsvController extends Controller
 
     /**
      * Display the specified resource.
+     * Descargar el archivo CSV
      */
     public function show(string $id)
     {
