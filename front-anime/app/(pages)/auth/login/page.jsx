@@ -34,7 +34,7 @@ export default function Login() {
       // Realizar el login
       const response = await login(formData);
 
-      if (response.success) {
+      if (response.token) {
         // Redirigir al dashboard
         router.push("/dashboard");
       } else {

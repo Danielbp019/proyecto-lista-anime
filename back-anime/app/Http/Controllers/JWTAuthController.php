@@ -20,8 +20,8 @@ class JWTAuthController extends Controller
                 'email' => $request->get('email'),
                 'password' => bcrypt($request->get('password')),
             ]);
-            /* Al generar un token en el momento del registro, el usuario puede ser autenticado inmediatamente sin necesidad de realizar un inicio de sesión adicional. Puedo enviarlo al dashboard de una vez desde aqui. */
-            /* $token = JWTAuth::fromUser($user); 
+            /* Al generar un token en el momento del registro, el usuario puede ser autenticado inmediatamente sin necesidad de realizar un inicio de sesión adicional. Puedo enviarlo al dashboard de una vez desde aqui. 
+            $token = JWTAuth::fromUser($user); 
             return response()->json(compact('user', 'token'), 201); */
 
             return response()->json(compact('user'), 201);
