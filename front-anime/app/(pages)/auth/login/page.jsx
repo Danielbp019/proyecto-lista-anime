@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { login } from "@/app/services/authService";
 import AlertDanger from "@/app/components/AlertDanger";
-import { getCsrfToken } from "@/app/services/axiosConfig"; // Asegúrate de tener esta función
 
 const loginSchema = z.object({
   email: z.string().email("Correo electrónico no válido"),
@@ -17,7 +16,7 @@ export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false); // Estado para el mensaje de error
+  const [isError, setIsError] = useState(false);
   const router = useRouter();
 
   const handleChange = (e) => {
@@ -32,21 +31,22 @@ export default function Login() {
       // Validación del formulario
       loginSchema.parse(formData);
 
-      // Obtener el token CSRF
-      await getCsrfToken();
-
       // Realizar el login
       const response = await login(formData);
 
-      // Si el login es exitoso, redirigir al dashboard
-      router.push("/dashboard");
+      if (response.success) {
+        // Redirigir al dashboard
+        router.push("/dashboard");
+      } else {
+        throw new Error(response.error);
+      }
     } catch (err) {
       if (err instanceof z.ZodError) {
         setError(err.errors[0].message);
       } else {
         setError(err.message || "Credenciales incorrectas o cuenta no encontrada.");
       }
-      setIsError(true); // Mostrar mensaje de error
+      setIsError(true);
     } finally {
       setIsLoading(false);
     }

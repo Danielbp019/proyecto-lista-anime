@@ -48,6 +48,12 @@ export default function Register() {
       await register(formData);
       setIsSuccess(true); // Mostrar mensaje de éxito
       setIsError(false); // Asegurarse de que el mensaje de error no se muestre
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
+      }); // Limpiar campos del formulario
     } catch (err) {
       if (err instanceof z.ZodError) {
         setError(err.errors[0].message);

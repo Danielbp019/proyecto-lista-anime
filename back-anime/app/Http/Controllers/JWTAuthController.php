@@ -21,15 +21,16 @@ class JWTAuthController extends Controller
                 'password' => bcrypt($request->get('password')),
             ]);
             /* Al generar un token en el momento del registro, el usuario puede ser autenticado inmediatamente sin necesidad de realizar un inicio de sesión adicional. Puedo enviarlo al dashboard de una vez desde aqui. */
-            $token = JWTAuth::fromUser($user);
+            /* $token = JWTAuth::fromUser($user); 
+            return response()->json(compact('user', 'token'), 201); */
 
-            return response()->json(compact('user', 'token'), 201);
+            return response()->json(compact('user'), 201);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 
-    // User login
+    // Iniciar sesión de usuario y obtener detalles del usuario
     public function login(LoginRequest $request)
     {
         // Validar las credenciales de entrada
@@ -37,30 +38,16 @@ class JWTAuthController extends Controller
         try {
             // Intentar autenticar al usuario y generar un nuevo token
             if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'Invalid credentials'], 401);
+                return response()->json(['error' => 'Credenciales inválidas'], 401);
             }
             // Obtener el usuario autenticado.
             /** @disregard [Comentario para que no salte un falso error: intelephense(P1013)] */
             $user = auth()->user();
 
-            return response()->json(compact('token'));
+            return response()->json(['token' => $token, 'user' => $user]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'No se pudo crear el token: ' . $e->getMessage()], 500);
         }
-    }
-
-    // Obtener el usuario autenticado
-    public function getUser()
-    {
-        try {
-            if (!$user = JWTAuth::parseToken()->authenticate()) {
-                return response()->json(['error' => 'Usuario no encontrado'], 404);
-            }
-        } catch (JWTException $e) {
-            return response()->json(['error' => 'Token inválido'], 400);
-        }
-
-        return response()->json(compact('user'));
     }
 
     // Cerrar sesión del usuario
@@ -85,6 +72,7 @@ class JWTAuthController extends Controller
 
     protected function respondWithToken($token)
     {
+        /** @disregard [Comentario para que no salte un falso error: intelephense(P1013)] */
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',

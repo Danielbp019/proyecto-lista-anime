@@ -6,6 +6,7 @@ import { refreshAccessToken } from "./authService";
 const apiClient = axios.create({
   baseURL: "http://localhost:8000/api",
   timeout: 20000, // 20 segundos de tiempo de espera
+  withCredentials: false, // No se usan cookies
 });
 
 // Interceptor para añadir el token a las solicitudes
