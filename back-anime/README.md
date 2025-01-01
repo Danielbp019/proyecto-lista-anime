@@ -47,7 +47,13 @@ php artisan key:generate
 php artisan migrate
 ```
 
-5. Levantar el servidor:
+5. Generar clave de encriptación de tokens.
+
+```sh
+php artisan jwt:secret
+```
+
+6. Levantar el servidor:
 
 ```sh
 php artisan serve
@@ -88,11 +94,13 @@ Registro con sactum y uuid ( La contraseña debe tener al menos dos letras mayú
 POST:   http://localhost:8000/api/register
 ```
 
-Login y logout:
+Autenticación:
 
 ```sh
 POST    http://localhost:8000/api/login
 POST    http://localhost:8000/api/logout
+POST    http://localhost:8000/api/register
+POST    http://localhost:8000/api/refresh
 ```
 
 Ejecución de pruebas (Las pruebas suelen crean archivos en la carpeta storage/app que son desechables):
@@ -114,10 +122,6 @@ Limpiar todo:
 ```sh
 php artisan optimize:clear
 ```
-
-### Consideraciones
-
-La tabla "personal_access_tokens" necesita un vaciado cada cierto tiempo por acumulación de historial.
 
 Lista de rutas comando:
 
