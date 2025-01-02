@@ -1,5 +1,3 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
 
 First, run the development server:
@@ -13,12 +11,6 @@ pnpm dev
 # or
 bun dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 # Actualizar dependencias.
 
@@ -45,3 +37,13 @@ ncu -u
 ```sh
 npm install
 ```
+
+## Notas
+
+1. Almacenamiento del Token: Cuando el usuario inicia sesión, el token JWT se guarda tanto en el localStorage como en una cookie llamada auth_token.
+
+2. Middleware: En el middleware de Next.js, se verifica la existencia de la cookie auth_token para determinar si el usuario está autenticado. Si la cookie no está presente, se redirige al usuario a la página de login.
+
+3. Verificación en el Cliente: Además, en el DashboardLayout, se verifica el token almacenado en el localStorage para asegurar que el usuario esté autenticado antes de permitir el acceso al contenido del dashboard.
+
+Al combinar el almacenamiento en cookies y localStorage, logramos una protección de rutas más robusta y aseguramos que solo los usuarios autenticados tengan acceso al dashboard.

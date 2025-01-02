@@ -17,6 +17,10 @@ export const login = async (data) => {
   try {
     const response = await apiClient.post("/login", data);
     localStorage.setItem("access_token", response.data.token);
+
+    // Guardar el token en una cookie
+    document.cookie = `auth_token=${response.data.token}; path=/; HttpOnly; SameSite=Lax`;
+
     return response.data;
   } catch (error) {
     console.error("Error iniciando sesión:", error.response ? error.response.data : error.message);
@@ -40,6 +44,10 @@ export const logout = async () => {
   try {
     const response = await apiClient.post("/logout");
     localStorage.removeItem("access_token");
+
+    // Eliminar la cookie
+    document.cookie = "auth_token=; max-age=0; path=/;";
+
     return response.data;
   } catch (error) {
     console.error("Error cerrando sesión:", error.response ? error.response.data : error.message);

@@ -18,6 +18,15 @@ export default function DashboardLayout({ children }) {
   const router = useRouter();
 
   useEffect(() => {
+    // Verificación del token de autenticación
+    const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      router.push("/auth/login");
+    }
+  }, [router]);
+
+  useEffect(() => {
     // Configurar el tema inicial desde el almacenamiento local
     const storedTheme = localStorage.getItem("theme") || "dark";
     setSelectedTheme(storedTheme);
