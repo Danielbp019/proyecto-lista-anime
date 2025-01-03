@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { logout } from "@/app/services/authService";
 import SideBar from "../components/UI/SideBar";
 import TemasDisponibles from "../components/TemasDisponibles";
+import Link from "next/link";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "@/app/styles/globals.css";
 
@@ -118,7 +119,9 @@ export default function DashboardLayout({ children }) {
           {/* Nav */}
           <nav className="flex items-center space-x-4">
             {/* Selector de tema y saludo */}
-            <div className="badge badge-primary">Hola {userName}, usas el tema: {selectedTheme || "Cargando..."}</div>
+            <div className="badge badge-primary">
+              Hola {userName}, usas el tema: {selectedTheme || "Cargando..."}
+            </div>
             {/* dropdown de temas */}
             <div className="dropdown dropdown-end">
               <button
@@ -140,14 +143,14 @@ export default function DashboardLayout({ children }) {
               {isProfileDropdownOpen && (
                 <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
                   <li>
-                    <a href="/settings">
-                      <i className="bi bi-gear"></i> {/* Icono de configuración */}
+                    <Link href="/dashboard/configuracion">
+                      <i className="bi bi-gear"></i>
                       Configuración
-                    </a>
+                    </Link>
                   </li>
                   <li>
                     <button onClick={handleLogout} className="btn btn-error btn-sm">
-                      <i className="bi bi-box-arrow-right"></i> {/* Icono de cerrar sesión */}
+                      <i className="bi bi-box-arrow-right"></i>
                       Cerrar Sesión
                     </button>
                   </li>

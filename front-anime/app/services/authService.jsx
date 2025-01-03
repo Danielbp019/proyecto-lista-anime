@@ -17,6 +17,7 @@ export const login = async (data) => {
   try {
     const response = await apiClient.post("/login", data);
     localStorage.setItem("access_token", response.data.token);
+    localStorage.setItem("user_id", response.data.user.id); // Almacenar el ID del usuario
     localStorage.setItem("user_name", response.data.user.name); // Almacenar el nombre del usuario
 
     // Guardar el token en una cookie SIN HttpOnly, ya que esto solo puede hacerse desde el servidor
@@ -44,9 +45,14 @@ export const register = async (data) => {
 export const logout = async () => {
   try {
     const response = await apiClient.post("/logout");
-    localStorage.removeItem("access_token");
 
-    // Eliminar la cookie
+    // Eliminar toda la información del usuario del localStorage
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("user_id");
+    localStorage.removeItem("user_name");
+    localStorage.removeItem("theme"); // Eliminar el tema seleccionado, si está almacenado
+
+    // Eliminar la cookie de autenticación
     document.cookie = "auth_token=; max-age=0; path=/;";
 
     return response.data;

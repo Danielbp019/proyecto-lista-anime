@@ -61,13 +61,29 @@ php artisan serve
 
 ## 💡 Rutas
 
+Autenticación:
+
+```sh
+POST    http://localhost:8000/api/login
+POST    http://localhost:8000/api/logout
+POST    http://localhost:8000/api/register
+POST    http://localhost:8000/api/refresh
+```
+
+Usuario:
+
+```sh
+GET     http://localhost:8000/api/showUser/id
+PATCH   http://localhost:8000/api/updateUser/id
+```
+
 CRUD anime:
 
 ```sh
 GET:    http://localhost:8000/api/animes
 POST:   http://localhost:8000/api/animes
-PUT:    http://localhost:8000/api/animes/1/
-DELETE: http://localhost:8000/api/animes/1
+PUT:    http://localhost:8000/api/animes/id/
+DELETE: http://localhost:8000/api/animes/id
 ```
 
 Subir un archivo csv:
@@ -92,15 +108,6 @@ Registro con sactum y uuid ( La contraseña debe tener al menos dos letras mayú
 
 ```sh
 POST:   http://localhost:8000/api/register
-```
-
-Autenticación:
-
-```sh
-POST    http://localhost:8000/api/login
-POST    http://localhost:8000/api/logout
-POST    http://localhost:8000/api/register
-POST    http://localhost:8000/api/refresh
 ```
 
 Ejecución de pruebas (Las pruebas suelen crean archivos en la carpeta storage/app que son desechables):
