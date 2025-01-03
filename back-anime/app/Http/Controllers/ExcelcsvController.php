@@ -47,7 +47,7 @@ class ExcelcsvController extends Controller
                 array_shift($csvData);
             }
 
-            // Obtener el user_id del request
+            // Obtener el user_id como valor directo del request
             $userId = $request->user_id;
 
             // Iterar sobre los datos y llenarlos en la tabla
@@ -84,18 +84,21 @@ class ExcelcsvController extends Controller
 
     /**
      * Display the specified resource.
-     * Descargar el archivo CSV
+     * Descargar el archivo CSV filtrado por user_id
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
         try {
-            // Obtener todos los registros de la tabla `animes`
-            $animes = AnimeModel::all();
+            // Obtener el user_id como valor directo del request
+            $userId = $id;
+
+            // Obtener los registros de la tabla `animes` filtrados por user_id
+            $animes = AnimeModel::where('user_id', $userId)->get();
 
             if ($animes->isEmpty()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'No hay registros en la tabla animes.'
+                    'message' => 'No hay registros en la tabla animes para este usuario.'
                 ], 404);
             }
 

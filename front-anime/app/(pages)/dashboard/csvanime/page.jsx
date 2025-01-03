@@ -37,10 +37,10 @@ export default function CsvanimePage() {
     }
   };
 
-  const handleDownload = async (id) => {
+  const handleDownload = async () => {
     if (countdown === 0) {
       try {
-        await getExcelcsv(id);
+        await getExcelcsv(); // No se pasa el `id` aquí, se obtiene internamente
         setCountdown(10); // Iniciar el contador de 10 segundos
       } catch (error) {
         setErrorMessage("Error al descargar el archivo CSV.");
@@ -130,7 +130,7 @@ export default function CsvanimePage() {
           <div className="card flex-grow bg-base-100 shadow-xl mr-4 border shadow-t">
             <div className="card-body">
               <h2 className="card-title">Descargar Archivo CSV</h2>
-              <button onClick={() => handleDownload(1)} className="btn btn-secondary mt-4" disabled={countdown > 0}>
+              <button onClick={handleDownload} className="btn btn-secondary mt-4" disabled={countdown > 0}>
                 {countdown > 0 ? `Esperar ${countdown}s` : "Descargar CSV"}
               </button>
             </div>

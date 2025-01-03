@@ -2,9 +2,10 @@
 import apiClient from "./axiosConfig";
 
 // Descargar el archivo CSV
-export const getExcelcsv = async (id) => {
+export const getExcelcsv = async () => {
   try {
-    const response = await apiClient.get(`/excelcsv/${id}`, {
+    const userId = localStorage.getItem("user_id"); // Obtener el user_id del localStorage
+    const response = await apiClient.get(`/excelcsv/${userId}`, {
       responseType: "blob",
     });
 
