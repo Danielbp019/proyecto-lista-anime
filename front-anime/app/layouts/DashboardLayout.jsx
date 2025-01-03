@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { logout } from "@/app/services/authService";
 import SideBar from "../components/UI/SideBar";
+import TemasDisponibles from "../components/TemasDisponibles";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "@/app/styles/globals.css";
 
@@ -15,14 +16,18 @@ export default function DashboardLayout({ children }) {
   const [isThemeDropdownOpen, setIsThemeDropdownOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState(() => "");
+  const [userName, setUserName] = useState(""); // Estado para almacenar el nombre del usuario
   const router = useRouter();
 
   useEffect(() => {
     // Verificación del token de autenticación
     const token = localStorage.getItem("access_token");
+    const userName = localStorage.getItem("user_name"); // Obtener el nombre del usuario
 
     if (!token) {
       router.push("/auth/login");
+    } else {
+      setUserName(userName); // Establecer el nombre del usuario en el estado
     }
   }, [router]);
 
@@ -95,7 +100,6 @@ export default function DashboardLayout({ children }) {
   return (
     <div className="flex h-screen">
       <SideBar isSidebarOpen={isSidebarOpen} />
-
       {/* Main Layout */}
       <div className={`flex-1 flex flex-col ${isSidebarOpen ? "ml-64" : "ml-0"} transition-all duration-300`}>
         {/* Header */}
@@ -109,8 +113,13 @@ export default function DashboardLayout({ children }) {
               <span className="font-bold ml-2">DB Admin - Proyecto Lista Anime</span>
             </div>
           </div>
+          {/* Mensajes de error */}
           {error && <p className="text-error text-sm text-center mb-4">{error}</p>}
+          {/* Nav */}
           <nav className="flex items-center space-x-4">
+            {/* Selector de tema y saludo */}
+            <div className="badge badge-primary">Hola {userName}, usas el tema: {selectedTheme || "Cargando..."}</div>
+            {/* dropdown de temas */}
             <div className="dropdown dropdown-end">
               <button
                 className="btn btn-ghost btn-circle dropdown-toggle bg-gray-200 text-black"
@@ -119,48 +128,9 @@ export default function DashboardLayout({ children }) {
               >
                 Temas
               </button>
-              {isThemeDropdownOpen && (
-                <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-                  {[
-                    "light",
-                    "dark",
-                    "cupcake",
-                    "bumblebee",
-                    "emerald",
-                    "corporate",
-                    "synthwave",
-                    "retro",
-                    "cyberpunk",
-                    "valentine",
-                    "halloween",
-                    "garden",
-                    "forest",
-                    "aqua",
-                    "lofi",
-                    "pastel",
-                    "fantasy",
-                    "wireframe",
-                    "black",
-                    "luxury",
-                    "dracula",
-                    "cmyk",
-                    "autumn",
-                    "business",
-                    "acid",
-                    "lemonade",
-                    "night",
-                    "coffee",
-                    "winter",
-                  ].map((theme) => (
-                    <li key={theme}>
-                      <button onClick={() => handleThemeChange(theme)}>{theme}</button>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              {isThemeDropdownOpen && <TemasDisponibles handleThemeChange={handleThemeChange} />}
             </div>
-
-            <div className="badge badge-primary">Tema en uso: {selectedTheme || "Cargando..."}</div>
+            {/* dropdown menu de usuario */}
             <div className="dropdown dropdown-end">
               <label tabIndex={0} className="btn btn-ghost btn-circle" onClick={toggleProfileDropdown}>
                 <div className="w-10 rounded-full">

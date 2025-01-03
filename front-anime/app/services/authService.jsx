@@ -17,9 +17,10 @@ export const login = async (data) => {
   try {
     const response = await apiClient.post("/login", data);
     localStorage.setItem("access_token", response.data.token);
+    localStorage.setItem("user_name", response.data.user.name); // Almacenar el nombre del usuario
 
-    // Guardar el token en una cookie
-    document.cookie = `auth_token=${response.data.token}; path=/; HttpOnly; SameSite=Lax`;
+    // Guardar el token en una cookie SIN HttpOnly, ya que esto solo puede hacerse desde el servidor
+    document.cookie = `auth_token=${response.data.token}; path=/; SameSite=Lax`;
 
     return response.data;
   } catch (error) {
