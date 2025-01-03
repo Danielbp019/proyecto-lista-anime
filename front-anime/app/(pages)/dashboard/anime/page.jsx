@@ -30,7 +30,8 @@ export default function AnimePage() {
 
   const fetchAnimes = async () => {
     setLoading(true);
-    const result = await getAnimes();
+    const userId = localStorage.getItem("user_id"); // Obtener user_id del localStorage
+    const result = await getAnimes(userId); // Pasar userId a getAnimes
     if (result.success) {
       setData(result.data);
     } else {

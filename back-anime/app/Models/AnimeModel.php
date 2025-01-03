@@ -18,10 +18,17 @@ class AnimeModel extends Model
         'numero_capitulos',
         'visto',
         'comentarios',
-        'fecha_actualizacion'
+        'fecha_actualizacion',
+        'user_id'
     ];
 
     protected $casts = [
         'visto' => 'integer',
     ];
+
+    /** * Obtener el usuario que posee este anime. */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

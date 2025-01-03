@@ -40,7 +40,9 @@ export const getExcelcsv = async (id) => {
 export const createExcelcsv = async (file) => {
   try {
     const formData = new FormData();
+    const userId = localStorage.getItem("user_id"); // Obtener el user_id del localStorage
     formData.append("csv-file", file); // Nombre del campo debe coincidir con el backend
+    formData.append("user_id", userId); // Agregar el user_id al FormData
 
     const response = await apiClient.post("/excelcsv", formData, {
       headers: {

@@ -47,6 +47,9 @@ class ExcelcsvController extends Controller
                 array_shift($csvData);
             }
 
+            // Obtener el user_id del request
+            $userId = $request->user_id;
+
             // Iterar sobre los datos y llenarlos en la tabla
             $animes = [];
             foreach ($csvData as $row) {
@@ -63,7 +66,8 @@ class ExcelcsvController extends Controller
                     'numero_capitulos' => $animeData['numero_capitulos'],
                     'visto' => $animeData['visto'] ?: 1,
                     'comentarios' => $animeData['comentarios'] ?: 'Nada que decir o leer por aquí...',
-                    'fecha_actualizacion' => $animeData['fecha_actualizacion'] ?: now()
+                    'fecha_actualizacion' => $animeData['fecha_actualizacion'] ?: now(),
+                    'user_id' => $userId, // Agregar el user_id al arreglo
                 ];
             }
             // Insertar en la base de datos

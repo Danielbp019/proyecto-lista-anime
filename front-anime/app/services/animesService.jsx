@@ -1,10 +1,12 @@
 // services/animesService.jsx
 import apiClient from "./axiosConfig";
 
-// Obtener lista de animes
-export const getAnimes = async () => {
+// Obtener lista de animes por user_id
+export const getAnimes = async (userId) => {
   try {
-    const response = await apiClient.get("/animes");
+    const response = await apiClient.get(`/animes`, {
+      params: { id: userId },
+    });
     return { success: true, data: response.data };
   } catch (error) {
     console.error("Error obteniendo animes (Service):", {
@@ -37,10 +39,10 @@ export const createAnime = async (data) => {
   }
 };
 
-// Actualizar un anime existente
+// Actualizar un anime
 export const updateAnime = async (id, data) => {
   try {
-    const response = await apiClient.put(`/animes/${id}`, data);
+    const response = await apiClient.patch(`/animes/${id}`, data);
     return { success: true, data: response.data };
   } catch (error) {
     console.error("Error actualizando anime (Service):", {
@@ -55,13 +57,13 @@ export const updateAnime = async (id, data) => {
   }
 };
 
-// Eliminar un anime por ID
+// Eliminar un anime
 export const deleteAnime = async (id) => {
   try {
-    await apiClient.delete(`/animes/${id}`);
-    return { success: true };
+    const response = await apiClient.delete(`/animes/${id}`);
+    return { success: true, data: response.data };
   } catch (error) {
-    console.error("Error borrando anime (Service):", {
+    console.error("Error eliminando anime (Service):", {
       message: error.message,
       response: error.response?.data,
       status: error.response?.status,

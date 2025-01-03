@@ -15,10 +15,12 @@ class AnimeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            // Select.
+            // Obtener el id del usuario desde la solicitud
+            $userId = $request->id;
+            // Select con filtro por user_id
             $anime = AnimeModel::select(
                 'id',
                 'nombre',
@@ -27,6 +29,7 @@ class AnimeController extends Controller
                 'comentarios',
                 'fecha_actualizacion'
             )
+                ->where('user_id', $userId)
                 ->orderBy('nombre', 'asc')
                 ->get();
 
@@ -49,6 +52,7 @@ class AnimeController extends Controller
                 'visto' => $request['visto'],
                 'comentarios' => $this->mb_ucfirst(trim($request['comentarios']), "UTF-8", true),
                 'fecha_actualizacion' => Carbon::now()->format('Y-m-d'),
+                'user_id' => $request->user_id,
             ]);
 
             return response()->json(['success' => true, 'nuevoAnime' => $nuevoAnime], 201);

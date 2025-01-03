@@ -9,12 +9,15 @@ export default function AnimeModal({ isOpen, anime, onClose, onSave }) {
     numero_capitulos: 0,
     visto: 0,
     comentarios: "",
+    user_id: 0, // Agregar el campo user_id aquí
   });
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
+    // Obtener el user_id del localStorage
+    const userId = localStorage.getItem("user_id");
     if (anime) {
-      setFormData(anime);
+      setFormData({ ...anime, user_id: userId });
     } else {
       setFormData({
         id: 0,
@@ -22,6 +25,7 @@ export default function AnimeModal({ isOpen, anime, onClose, onSave }) {
         numero_capitulos: 0,
         visto: 0,
         comentarios: "",
+        user_id: userId, // Asignar el user_id al formData
       });
     }
   }, [anime]);

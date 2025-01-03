@@ -19,8 +19,11 @@ return new class extends Migration
             $table->boolean('visto')->default(1)->comment('Si el anime terminó es 1, de lo contrario es 0');
             $table->text('comentarios')->nullable()->comment('Expresate para que nunca lo olvides');
             $table->date('fecha_actualizacion')->nullable()->comment('Fecha de la última actualización');
+            $table->char('user_id', 36); // Campo para la relación con la tabla users
             // Agregar un índice al campo 'nombre'
             $table->index('nombre');
+            // Establecer la clave foránea
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
