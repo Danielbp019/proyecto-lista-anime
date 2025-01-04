@@ -40,7 +40,7 @@ export default function Home() {
             <span className="h-6 w-6 mr-2" role="img" aria-label="Anime">
               📺
             </span>
-            Almacena información de los animes vistos, número de capítulos, y comentarios.
+            Almacena información de los animes vistos, número de capítulos y comentarios.
           </li>
           <li className="flex items-center text-neutral-content">
             <span className="h-6 w-6 mr-2" role="img" aria-label="State">

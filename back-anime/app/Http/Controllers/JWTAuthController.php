@@ -35,6 +35,10 @@ class JWTAuthController extends Controller
     {
         // Validar las credenciales de entrada
         $credentials = $request->only('email', 'password');
+        // Verificar si existen datos en la tabla `User`
+        if (User::count() === 0) {
+            return response()->json(['error' => 'No existen usuarios registrados en el sistema'], 404);
+        }
         try {
             // Intentar autenticar al usuario y generar un nuevo token
             if (!$token = JWTAuth::attempt($credentials)) {

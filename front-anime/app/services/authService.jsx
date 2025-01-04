@@ -16,17 +16,21 @@ export const refreshAccessToken = async () => {
 export const login = async (data) => {
   try {
     const response = await apiClient.post("/login", data);
+    if (response.data.error === "No existen usuarios registrados en el sistema") {
+      throw new Error("No existen usuarios registrados en el sistema. Por favor, registra una cuenta primero.");
+    }
+    // Procedemos a guardar los datos que necesitamos.
     localStorage.setItem("access_token", response.data.token);
-    localStorage.setItem("user_id", response.data.user.id); // Almacenar el ID del usuario
-    localStorage.setItem("user_name", response.data.user.name); // Almacenar el nombre del usuario
+    localStorage.setItem("user_id", response.data.user.id);
+    localStorage.setItem("user_name", response.data.user.name);
 
     // Guardar el token en una cookie SIN HttpOnly, ya que esto solo puede hacerse desde el servidor
     document.cookie = `auth_token=${response.data.token}; path=/; SameSite=Lax`;
 
     return response.data;
   } catch (error) {
-    console.error("Error iniciando sesión:", error.response ? error.response.data : error.message);
-    throw new Error("Error al iniciar sesión.");
+    //console.error("Error iniciando sesión:", error.response ? error.response.data : error.message);
+    throw new Error(error.response ? error.response.data.error : "Error al iniciar sesión.");
   }
 };
 
