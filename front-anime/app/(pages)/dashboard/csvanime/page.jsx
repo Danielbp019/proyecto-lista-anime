@@ -4,10 +4,12 @@
 import DashboardLayout from "@/app/layouts/DashboardLayout";
 import { useState, useEffect } from "react";
 import { getExcelcsv, createExcelcsv, deleteExcelcsv } from "@/app/services/csvanimeService";
+import "@/app/styles/globals.css";
+// Componentes
 import ConfirmDialog from "@/app/components/ConfirmDialog";
 import AlertSuccess from "@/app/components/AlertSuccess";
-import AlertDanger from "@/app/components/AlertDanger"; // Import AlertDanger
-import "@/app/styles/globals.css";
+import AlertDanger from "@/app/components/AlertDanger";
+import Breadcrumb from "@/app/components/Breadcrumb";
 
 export default function CsvanimePage() {
   const [file, setFile] = useState(null);
@@ -86,24 +88,18 @@ export default function CsvanimePage() {
     }
   }, [countdown]);
 
+  const breadcrumbItems = [
+    { label: "Escritorio", href: "/dashboard" },
+    { label: "Subida de CSV animes", active: true },
+  ];
+
   return (
     <DashboardLayout>
       <div className="flex flex-col items-center h-full">
         <div className="w-full mb-4">
           <h1 className="text-2xl font-bold text-left">Subida de CSV anime</h1>
           <div className="flex items-center justify-between mt-4">
-            <nav className="text-sm breadcrumbs">
-              <ol className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <a href="/dashboard" className="link">
-                    Escritorio
-                  </a>
-                </li>
-                <li className="breadcrumb-item active">
-                  <span>Subida de CSV anime</span>
-                </li>
-              </ol>
-            </nav>
+            <Breadcrumb items={breadcrumbItems} />
           </div>
         </div>
 

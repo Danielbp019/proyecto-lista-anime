@@ -28,7 +28,7 @@ const SideBar = ({ isSidebarOpen }) => {
         <li>
           <Link href="/dashboard/csvanime" className="flex items-center">
             <i className="bi bi-file-earmark-arrow-up"></i>
-            <span className="ml-2">Subida de CSV anime</span>
+            <span className="ml-2">Subida de CSV animes</span>
           </Link>
         </li>
       </ul>

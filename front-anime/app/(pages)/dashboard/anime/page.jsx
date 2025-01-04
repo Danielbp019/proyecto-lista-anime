@@ -2,19 +2,16 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {
-  useReactTable,
-  getCoreRowModel,
-  flexRender,
-  getPaginationRowModel,
-  getFilteredRowModel,
-} from "@tanstack/react-table";
+import { useReactTable, getCoreRowModel, getPaginationRowModel, getFilteredRowModel } from "@tanstack/react-table";
 import { getAnimes, createAnime, updateAnime, deleteAnime } from "@/app/services/animesService";
+import DashboardLayout from "@/app/layouts/DashboardLayout";
+// Componentes
 import AnimeModal from "@/app/components/AnimeModal";
 import ConfirmDialog from "@/app/components/ConfirmDialog";
-import AlertSuccess from "@/app/components/AlertSuccess"; // Importa el componente de alerta de éxito
-import AlertDanger from "@/app/components/AlertDanger"; // Importa el componente de alerta de error
-import DashboardLayout from "@/app/layouts/DashboardLayout";
+import AlertSuccess from "@/app/components/AlertSuccess";
+import AlertDanger from "@/app/components/AlertDanger";
+import Table from "@/app/components/Table";
+import Breadcrumb from "@/app/components/Breadcrumb";
 
 export default function AnimePage() {
   const [data, setData] = useState([]);
@@ -131,24 +128,17 @@ export default function AnimePage() {
     onColumnFiltersChange: setColumnFilters,
   });
 
+  const breadcrumbItems = [
+    { label: "Escritorio", href: "/dashboard" },
+    { label: "Lista de animes", active: true },
+  ];
   return (
     <DashboardLayout>
       <div className="flex flex-col items-center h-full">
         <div className="w-full mb-4">
           <h1 className="text-2xl font-bold text-left">Listado de Animes</h1>
           <div className="flex items-center justify-between mt-4">
-            <nav className="text-sm breadcrumbs">
-              <ol className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <a href="/dashboard" className="link">
-                    Escritorio
-                  </a>
-                </li>
-                <li className="breadcrumb-item active">
-                  <span>Lista de animes</span>
-                </li>
-              </ol>
-            </nav>
+            <Breadcrumb items={breadcrumbItems} />
             <button className="btn btn-wide btn-sm btn-primary mx-auto" onClick={() => setModalOpen(true)}>
               Agregar Nuevo Anime
             </button>
@@ -166,77 +156,7 @@ export default function AnimePage() {
             </div>
           </div>
         </div>
-        <div className="overflow-x-auto w-full">
-          <table className="table w-full">
-            <thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <th key={header.id}>{flexRender(header.column.columnDef.header, header.getContext())}</th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan={columns.length}>
-                    <div className="flex justify-center items-center">
-                      Cargando datos
-                      <span className="ml-4 loading loading-dots loading-lg text-warning"></span>
-                    </div>
-                  </td>
-                </tr>
-              ) : table.getRowModel().rows.length > 0 ? (
-                table.getRowModel().rows.map((row) => (
-                  <tr key={row.id}>
-                    {row.getVisibleCells().map((cell) => (
-                      <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                    ))}
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={columns.length}>
-                    <div className="flex justify-center items-center">No se encontraron datos</div>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-          <div className="flex justify-center mt-4">
-            <div className="join">
-              <button className="join-item btn btn-outline" onClick={() => table.setPageIndex(0)}>
-                Primera
-              </button>
-              <button className="join-item btn btn-outline" onClick={() => table.previousPage()}>
-                Anterior
-              </button>
-              <button className="join-item btn btn-outline" onClick={() => table.nextPage()}>
-                Siguiente
-              </button>
-              <button
-                className="join-item btn btn-outline"
-                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-              >
-                Última
-              </button>
-              <select
-                className="join-item btn btn-outline"
-                value={table.getState().pagination.pageSize}
-                onChange={(e) => {
-                  table.setPageSize(Number(e.target.value));
-                }}
-              >
-                {[10, 20, 30, 40, 50].map((pageSize) => (
-                  <option key={pageSize} value={pageSize}>
-                    {pageSize}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
+        <Table table={table} loading={loading} columns={columns} />
         <AnimeModal isOpen={isModalOpen} anime={animeToEdit} onClose={handleCloseModal} onSave={handleSave} />
         <ConfirmDialog
           isOpen={confirmDialogOpen}

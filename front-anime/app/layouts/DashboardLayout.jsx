@@ -127,8 +127,8 @@ export default function DashboardLayout({ children }) {
               <button className="btn btn-ghost btn-circle dropdown-toggle" tabIndex={0} onClick={toggleThemeDropdown}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
+                  width="21"
+                  height="21"
                   fill="currentColor"
                   className="bi bi-box2-heart-fill"
                   viewBox="0 0 16 16"
