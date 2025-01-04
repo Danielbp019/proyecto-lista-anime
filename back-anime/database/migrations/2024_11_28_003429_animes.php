@@ -11,7 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        // Crear la tabla tipos
+        Schema::create('tipos', function (Blueprint $table) {
+            $table->id();
+            $table->string('nombretipo')->comment('Nombre del tipo: anime, dorama, serie.')->nullable(false)->unique();
+        });
+
+        // Crear la tabla animes
         Schema::create('animes', function (Blueprint $table) {
             $table->id();
             $table->string('nombre')->comment('Nombre del anime en español')->nullable(false)->unique();
@@ -20,10 +26,12 @@ return new class extends Migration
             $table->text('comentarios')->nullable()->comment('Expresate para que nunca lo olvides');
             $table->date('fecha_actualizacion')->nullable()->comment('Fecha de la última actualización');
             $table->char('user_id', 36); // Campo para la relación con la tabla users
+            $table->unsignedBigInteger('tipo_id'); // Campo para la relación con la tabla tipos
             // Agregar un índice al campo 'nombre'
             $table->index('nombre');
-            // Establecer la clave foránea
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            // Establecer las claves foráneas
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('tipo_id')->references('id')->on('tipos')->noActionOnDelete();
         });
     }
 
@@ -32,7 +40,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        // Eliminar la tabla animes primero
         Schema::dropIfExists('animes');
+        // Luego eliminar la tabla tipos
+        Schema::dropIfExists('tipos');
     }
 };

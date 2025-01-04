@@ -53,7 +53,13 @@ php artisan migrate
 php artisan jwt:secret
 ```
 
-6. Levantar el servidor:
+6. Ejecuta el seeder utilizando el siguiente comando:
+
+```sh
+php artisan db:seed --class=TiposSeeder
+```
+
+7. Levantar el servidor:
 
 ```sh
 php artisan serve
@@ -82,8 +88,17 @@ CRUD anime:
 ```sh
 GET:    http://localhost:8000/api/animes
 POST:   http://localhost:8000/api/animes
-PUT:    http://localhost:8000/api/animes/id/
+PATCH:  http://localhost:8000/api/animes/id/
 DELETE: http://localhost:8000/api/animes/id
+```
+
+CRUD tipos:
+
+```sh
+GET:    http://localhost:8000/api/tipos
+POST:   http://localhost:8000/api/tipos
+PATCH:  http://localhost:8000/api/tipos/id/
+DELETE: http://localhost:8000/api/tipos/id
 ```
 
 Subir un archivo csv:

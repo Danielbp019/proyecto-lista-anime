@@ -6,6 +6,7 @@ use App\Http\Middleware\JwtMiddleware;
 use App\Http\Controllers\AnimeController;
 use App\Http\Controllers\ExcelcsvController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\TipoController;
 
 Route::post('/register', [JWTAuthController::class, 'register']);
 Route::post('/login', [JWTAuthController::class, 'login']);
@@ -17,4 +18,5 @@ Route::middleware([JwtMiddleware::class])->group(function () {
     Route::patch('/updateUser/{id}', [UsuarioController::class, 'updateUser']);
     Route::apiResource('animes', AnimeController::class);
     Route::apiResource('excelcsv', ExcelcsvController::class)->only(['store', 'show', 'destroy']);
+    Route::apiResource('tipos', TipoController::class);
 });

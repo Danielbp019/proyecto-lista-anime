@@ -19,7 +19,8 @@ class AnimeModel extends Model
         'visto',
         'comentarios',
         'fecha_actualizacion',
-        'user_id'
+        'user_id',
+        'tipo_id'
     ];
 
     protected $casts = [
@@ -30,5 +31,11 @@ class AnimeModel extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /** * Obtener el tipo al que pertenece este anime. */
+    public function tipo()
+    {
+        return $this->belongsTo(TipoModel::class, 'tipo_id', 'id');
     }
 }
