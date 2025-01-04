@@ -79,7 +79,7 @@ export default function ConfiguracionPage() {
         </div>
         <div className="flex flex-row w-full mt-4 space-x-4">
           {/* Card de datos del usuario */}
-          <div className="card w-1/2 bg-base-100 shadow-xl border shadow-t">
+          <div className="card w-1/2 bg-base-100 shadow-xl border shadow-all">
             <div className="card-body">
               <h2 className="card-title">Datos del Usuario</h2>
               <div className="mb-4">
@@ -143,7 +143,7 @@ export default function ConfiguracionPage() {
             </div>
           </div>
           {/* Card para cambiar el nombre del usuario */}
-          <div className="card w-1/2 bg-base-100 shadow-xl border shadow-t">
+          <div className="card w-1/2 bg-base-100 shadow-xl border shadow-all">
             <div className="card-body">
               <h2 className="card-title">Cambiar Nombre</h2>
               <form onSubmit={handleSubmit}>

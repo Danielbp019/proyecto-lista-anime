@@ -108,7 +108,7 @@ export default function CsvanimePage() {
         </div>
 
         {/* Card de subida */}
-        <div className="card w-full bg-base-100 shadow-xl border shadow-t">
+        <div className="card w-full bg-base-100 shadow-xl border shadow-all">
           <div className="card-body">
             <h2 className="card-title">Subir Archivo CSV</h2>
             <input
@@ -127,7 +127,7 @@ export default function CsvanimePage() {
 
         {/* Doble card */}
         <div className="flex flex-row w-full mt-4">
-          <div className="card flex-grow bg-base-100 shadow-xl mr-4 border shadow-t">
+          <div className="card flex-grow bg-base-100 shadow-xl mr-4 border shadow-all">
             <div className="card-body">
               <h2 className="card-title">Descargar Archivo CSV</h2>
               <button onClick={handleDownload} className="btn btn-secondary mt-4" disabled={countdown > 0}>
@@ -136,7 +136,7 @@ export default function CsvanimePage() {
             </div>
           </div>
 
-          <div className="card flex-grow bg-base-100 shadow-xl border shadow-t">
+          <div className="card flex-grow bg-base-100 shadow-xl border shadow-all">
             <div className="card-body">
               <h2 className="card-title">Vaciar Tabla Anime</h2>
               <button onClick={openConfirmDialog} className="btn btn-error mt-4">
