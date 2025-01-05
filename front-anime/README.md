@@ -12,6 +12,10 @@ pnpm dev
 bun dev
 ```
 
+# Lanza el proyecto
+
+Usa el comando npm run build para compilar el proyecto y luego npm run start para ejecutarlo.
+
 # Actualizar dependencias.
 
 1. Instala npm-check-updates:

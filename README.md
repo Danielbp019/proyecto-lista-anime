@@ -1,10 +1,10 @@
-# Proyecto lista de animes
+# Proyecto lista de ocio
 
-Proyecto lista anime con arquitectura de rest API, es un programa para almacenar una lista ordenada de animes con indicador de visto, comentarios, número de capítulos, nombre y capacidad para generar archivos descargables, así como alimentarse desde un archivo CSV.
+Proyecto lista anime que posteriormente se llamo lista de ocio cuenta con arquitectura de rest API, es un programa para almacenar una lista ordenada de animes con indicador de visto, comentarios, número de capítulos, nombre y capacidad para generar archivos descargables, así como alimentarse desde un archivo CSV.
 
 ## Descripción del Proyecto
 
-Este proyecto no solo permite almacenar una lista de animes, sino que ofrece una interfaz de usuario intuitiva y atractiva donde los usuarios pueden gestionar fácilmente su contenido. Con un diseño responsive, el sitio se adapta a cualquier dispositivo, garantizando una experiencia de usuario óptima tanto en móviles como en computadoras de escritorio.
+Este proyecto no solo permite almacenar una lista de obras, sino que ofrece una interfaz de usuario intuitiva y atractiva donde los usuarios pueden gestionar fácilmente su contenido. Con un diseño responsive, el sitio se adapta a cualquier dispositivo, garantizando una experiencia de usuario óptima tanto en móviles como en computadoras de escritorio.
 
 ## Tecnologías Utilizadas
 
@@ -15,8 +15,9 @@ Este proyecto no solo permite almacenar una lista de animes, sino que ofrece una
 
 ## Funcionalidades Clave
 
-- **Gestión de Animes:** Los usuarios pueden agregar, editar y eliminar animes de su lista personalizada.
-- **Estado del Anime:** Posibilidad de marcar animes como vistos o no vistos, y agregar comentarios personales.
-- **Interacción con CSV:** Importación y exportación de listas de animes en formato CSV para una fácil gestión y migración de datos.
+- **Gestión de Animes:** Los usuarios pueden agregar, editar y eliminar obras de su lista personalizada.
+- **Estado del Anime:** Posibilidad de marcar obras como vistos o no vistos, y agregar comentarios personales.
+- **Interacción con CSV:** Importación y exportación de listas de obras en formato CSV para una fácil gestión y migración de datos.
 - **Interface Amigable:** Uso de componentes visuales y diseño atractivo para mejorar la experiencia del usuario.
-- **Búsqueda y Filtros:** Funcionalidad para buscar y filtrar animes basados en nombre.
+- **Búsqueda y Filtros:** Funcionalidad para buscar y filtrar obras basados en nombre.
+- **Tipos:** Funcionalidad para organizar las obras en tipos, como por ejemplo animes, doramas o series.
