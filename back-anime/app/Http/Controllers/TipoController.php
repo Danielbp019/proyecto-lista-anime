@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Models\TipoModel;
 // Validaciones
 use App\Http\Requests\TipoRequest;
@@ -17,6 +18,7 @@ class TipoController extends Controller
         //
         try {
             $tipos = TipoModel::select(
+                'id',
                 'nombretipo',
             )
                 ->orderBy('nombretipo', 'asc')
@@ -51,6 +53,13 @@ class TipoController extends Controller
     public function show(string $id)
     {
         //
+        try {
+            $tipoBuscar = TipoModel::findOrFail($id);
+
+            return response()->json($tipoBuscar);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 404);
+        }
     }
 
     /**

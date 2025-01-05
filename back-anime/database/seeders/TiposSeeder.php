@@ -15,6 +15,7 @@ class TiposSeeder extends Seeder
     {
         //
         DB::table('tipos')->insert([
+            ['nombretipo' => 'Sin definir'],
             ['nombretipo' => 'Anime'],
             ['nombretipo' => 'Dorama'],
             ['nombretipo' => 'Serie']

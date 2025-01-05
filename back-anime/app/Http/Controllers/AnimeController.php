@@ -27,7 +27,8 @@ class AnimeController extends Controller
                 'numero_capitulos',
                 'visto',
                 'comentarios',
-                'fecha_actualizacion'
+                'fecha_actualizacion',
+                'tipo_id'
             )
                 ->where('user_id', $userId)
                 ->orderBy('nombre', 'asc')
@@ -53,6 +54,7 @@ class AnimeController extends Controller
                 'comentarios' => $this->mb_ucfirst(trim($request['comentarios']), "UTF-8", true),
                 'fecha_actualizacion' => Carbon::now()->format('Y-m-d'),
                 'user_id' => $request->user_id,
+                'tipo_id' => $request->tipo_id
             ]);
 
             return response()->json(['success' => true, 'nuevoAnime' => $nuevoAnime], 201);
@@ -90,6 +92,7 @@ class AnimeController extends Controller
                 'visto' => $request['visto'],
                 'comentarios' => $this->mb_ucfirst(trim($request['comentarios']), "UTF-8", true),
                 'fecha_actualizacion' => Carbon::now()->format('Y-m-d'),
+                'tipo_id' => $request->tipo_id
             ]);
             $editarAnime->save();
 
@@ -125,15 +128,12 @@ class AnimeController extends Controller
     {
         // Buscar la primera letra alfabética
         preg_match('/[^\d\s]/u', $str, $matches, PREG_OFFSET_CAPTURE);
-
         // Si no hay letras alfabéticas, retornar la cadena original
         if (empty($matches)) {
             return $str;
         }
-
         $first_letter_pos = $matches[0][1];
         $first_letter = mb_strtoupper(mb_substr($str, $first_letter_pos, 1, $encoding), $encoding);
-
         // Partes iniciales y finales de la cadena
         $before_letter = mb_substr($str, 0, $first_letter_pos, $encoding);
         $after_letter = mb_substr($str, $first_letter_pos + 1, null, $encoding);

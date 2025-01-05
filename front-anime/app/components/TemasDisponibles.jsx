@@ -1,3 +1,5 @@
+// components/TemasDisponibles.jsx
+
 import React from "react";
 
 const TemasDisponibles = ({ handleThemeChange }) => {

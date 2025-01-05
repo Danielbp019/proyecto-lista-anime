@@ -28,7 +28,6 @@ class ExcelcsvController extends Controller
             $file = $request->file('csv-file');
             // Leer todas las líneas del archivo CSV
             $csvData = array_map('str_getcsv', file($file->getRealPath()));
-
             // Verificar que el archivo no esté vacío
             if (empty($csvData)) {
                 return response()->json([
@@ -38,8 +37,7 @@ class ExcelcsvController extends Controller
             }
 
             // Cabeceras esperadas
-            $expectedHeaders = ['nombre', 'numero_capitulos', 'visto', 'comentarios', 'fecha_actualizacion'];
-
+            $expectedHeaders = ['nombre', 'numero_capitulos', 'visto', 'comentarios', 'fecha_actualizacion', 'tipo_id'];
             // Verificar si la primera fila son las cabeceras esperadas
             $firstRow = $csvData[0];
             if ($firstRow === $expectedHeaders) {
@@ -49,26 +47,32 @@ class ExcelcsvController extends Controller
 
             // Obtener el user_id como valor directo del request
             $userId = $request->user_id;
-
             // Iterar sobre los datos y llenarlos en la tabla
             $animes = [];
+            $rowCount = 1;
             foreach ($csvData as $row) {
-                if (count($row) !== count($expectedHeaders)) {
+                // Si la fila tiene menos columnas, llenar las columnas faltantes con valores predeterminados
+                $row = array_pad($row, count($expectedHeaders), '');
+                $animeData = array_combine($expectedHeaders, $row);
+
+                // Validar que numero_capitulos sea un número
+                if (!is_numeric($animeData['numero_capitulos'])) {
                     return response()->json([
                         'success' => false,
-                        'message' => 'El formato del CSV no coincide con el número de columnas esperado.'
+                        'message' => 'El valor de numero_capitulos no es válido en la fila ' . $rowCount
                     ], 400);
                 }
-                $animeData = array_combine($expectedHeaders, $row);
 
                 $animes[] = [
                     'nombre' => $animeData['nombre'],
-                    'numero_capitulos' => $animeData['numero_capitulos'],
+                    'numero_capitulos' => (int)$animeData['numero_capitulos'],
                     'visto' => $animeData['visto'] ?: 1,
                     'comentarios' => $animeData['comentarios'] ?: 'Nada que decir o leer por aquí...',
                     'fecha_actualizacion' => $animeData['fecha_actualizacion'] ?: now(),
                     'user_id' => $userId, // Agregar el user_id al arreglo
+                    'tipo_id' => $animeData['tipo_id'] ?: 1, // Agregar el tipo_id al arreglo
                 ];
+                $rowCount++;
             }
             // Insertar en la base de datos
             AnimeModel::insert($animes);
@@ -108,7 +112,7 @@ class ExcelcsvController extends Controller
             $file = fopen($filePath, 'w');
 
             // Agregar encabezados manualmente al CSV
-            $headers = ['nombre', 'numero_capitulos', 'visto', 'comentarios', 'fecha_actualizacion'];
+            $headers = ['nombre', 'numero_capitulos', 'visto', 'comentarios', 'fecha_actualizacion', 'tipo_id'];
             fputcsv($file, $headers);
 
             // Agregar los datos de la tabla al archivo CSV
@@ -118,7 +122,8 @@ class ExcelcsvController extends Controller
                     $anime->numero_capitulos,
                     $anime->visto,
                     $anime->comentarios,
-                    $anime->fecha_actualizacion
+                    $anime->fecha_actualizacion,
+                    $anime->tipo_id
                 ]);
             }
             fclose($file);

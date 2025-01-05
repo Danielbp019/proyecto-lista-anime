@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 
-export default function AnimeModal({ isOpen, anime, onClose, onSave }) {
+export default function AnimeModal({ isOpen, anime, onClose, onSave, tipos }) {
+  // Recibir tipos como prop
   const [formData, setFormData] = useState({
     id: 0,
     nombre: "",
@@ -10,6 +11,7 @@ export default function AnimeModal({ isOpen, anime, onClose, onSave }) {
     visto: 0,
     comentarios: "",
     user_id: 0, // Agregar el campo user_id aquí
+    tipo_id: "", // Agregar el campo tipo_id aquí
   });
   const [errors, setErrors] = useState({});
 
@@ -26,6 +28,7 @@ export default function AnimeModal({ isOpen, anime, onClose, onSave }) {
         visto: 0,
         comentarios: "",
         user_id: userId, // Asignar el user_id al formData
+        tipo_id: "", // Inicializar tipo_id
       });
     }
   }, [anime]);
@@ -42,6 +45,9 @@ export default function AnimeModal({ isOpen, anime, onClose, onSave }) {
     }
     if (formData.numero_capitulos < 1) {
       newErrors.numero_capitulos = "El número de capítulos debe ser mayor a 0.";
+    }
+    if (!formData.tipo_id) {
+      newErrors.tipo_id = "Debes seleccionar un tipo.";
     }
     return newErrors;
   };
@@ -123,6 +129,25 @@ export default function AnimeModal({ isOpen, anime, onClose, onSave }) {
           <label className="label">
             <span className="label-text-alt">{formData.comentarios.length}/250 caracteres</span>
           </label>
+        </div>
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Tipo</span>
+          </label>
+          <select
+            className="select select-bordered"
+            value={formData.tipo_id}
+            onChange={(e) => handleChange("tipo_id", e.target.value)}
+            required
+          >
+            <option value="">Selecciona un tipo</option>
+            {Object.entries(tipos).map(([id, nombretipo]) => (
+              <option key={id} value={id}>
+                {nombretipo}
+              </option>
+            ))}
+          </select>
+          {errors.tipo_id && <span className="text-error">{errors.tipo_id}</span>}
         </div>
 
         <div className="modal-action">

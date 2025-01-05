@@ -107,7 +107,20 @@ export default function DashboardLayout({ children }) {
         <header className="w-full shadow z-40 flex items-center justify-between px-4 py-3">
           <div className="flex items-center space-x-3">
             <button onClick={toggleSidebar} className="btn btn-square btn-outline z-50">
-              <i className="bi bi-list"></i> {/* Icono de menú */}
+              {/* Icono de menú */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                fill="currentColor"
+                className="bi bi-list"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
+                />
+              </svg>
             </button>
             <div className="flex items-center text-primary">
               <Image src="/logo.png" alt="Logo" className="h-6 w-auto" width={50} height={50} />
