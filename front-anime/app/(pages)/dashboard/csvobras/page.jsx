@@ -54,11 +54,11 @@ export default function CsvanimePage() {
   const handleDelete = async (id) => {
     try {
       await deleteExcelcsv(id);
-      setAlertMessage("Tabla anime truncada con éxito");
+      setAlertMessage("Tabla truncada con éxito");
       setIsAlertOpen(true);
       setIsDialogOpen(false); // Cerrar el diálogo después de confirmar
     } catch (error) {
-      setErrorMessage("Error al vaciar la tabla de anime.");
+      setErrorMessage("Error al vaciar la tabla.");
       setIsErrorOpen(true); // Open error alert
     }
   };
@@ -90,14 +90,14 @@ export default function CsvanimePage() {
 
   const breadcrumbItems = [
     { label: "Escritorio", href: "/dashboard" },
-    { label: "Subida de CSV animes", active: true },
+    { label: "Operaciones con de CSV", active: true },
   ];
 
   return (
     <DashboardLayout>
       <div className="flex flex-col items-center h-full">
         <div className="w-full mb-4">
-          <h1 className="text-2xl font-bold text-left">Subida de CSV anime</h1>
+          <h1 className="text-2xl font-bold text-left">Operaciones con de CSV</h1>
           <div className="flex items-center justify-between mt-4">
             <Breadcrumb items={breadcrumbItems} />
           </div>
@@ -134,7 +134,7 @@ export default function CsvanimePage() {
 
           <div className="card flex-grow bg-base-100 shadow-xl border shadow-all">
             <div className="card-body">
-              <h2 className="card-title">Vaciar Tabla Anime</h2>
+              <h2 className="card-title">Vaciar Tabla</h2>
               <button onClick={openConfirmDialog} className="btn btn-error mt-4">
                 Vaciar Tabla
               </button>
@@ -145,7 +145,7 @@ export default function CsvanimePage() {
         {/* Diálogo de confirmación */}
         <ConfirmDialog
           isOpen={isDialogOpen}
-          message="¿Estás seguro de que deseas vaciar la tabla de anime? Esta acción no se puede deshacer y todos los datos se eliminarán."
+          message="¿Estás seguro de que deseas vaciar la tabla? Esta acción no se puede deshacer y todos los datos se eliminarán."
           onConfirm={() => handleDelete(1)}
           onCancel={closeConfirmDialog}
         />

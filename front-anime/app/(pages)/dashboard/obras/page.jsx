@@ -34,8 +34,8 @@ export default function AnimePage() {
     if (result.success) {
       setData(result.data);
     } else {
-      console.error("Error obteniendo animes:", result.error);
-      setAlertMessage(`Error al obtener los animes: ${result.error}`);
+      console.error("Error obteniendo las obras:", result.error);
+      setAlertMessage(`Error al obtener las obras: ${result.error}`);
       setAlertDangerOpen(true); // Mostrar la alerta de error
     }
     setLoading(false);
@@ -70,10 +70,10 @@ export default function AnimePage() {
     if (result.success) {
       await fetchAnimes();
       setColumnFilters([]);
-      setAlertMessage("Anime eliminado con éxito");
+      setAlertMessage("Obra eliminada con éxito");
       setAlertSuccessOpen(true);
     } else {
-      setAlertMessage(`Error al eliminar el anime: ${result.error}`);
+      setAlertMessage(`Error al eliminar la obra: ${result.error}`);
       setAlertDangerOpen(true); // Mostrar la alerta de error
     }
     setAnimeToDelete(null);
@@ -91,10 +91,10 @@ export default function AnimePage() {
       setModalOpen(false);
       setAnimeToEdit(null);
       await fetchAnimes();
-      setAlertMessage(animeToEdit ? "Anime actualizado con éxito" : "Anime creado con éxito");
+      setAlertMessage(animeToEdit ? "Obra actualizada con éxito" : "Obra creada con éxito");
       setAlertSuccessOpen(true);
     } else {
-      setAlertMessage(`Error al guardar el anime: ${result.error}`);
+      setAlertMessage(`Error al guardar la obra: ${result.error}`);
       setAlertDangerOpen(true); // Mostrar la alerta de error
     }
   };
@@ -121,7 +121,25 @@ export default function AnimePage() {
     {
       accessorKey: "tipo_id",
       header: "Tipo",
-      cell: ({ row }) => tipos[row.original.tipo_id] || "Sin definir",
+      cell: ({ row }) => {
+        const tipo = tipos[row.original.tipo_id] || "Sin definir";
+
+        // Definir clases de estilo según el tipo
+        let badgeClass = "badge ";
+        if (tipo === "Sin definir") {
+          badgeClass += "badge-neutral";
+        } else if (tipo === "Anime") {
+          badgeClass += "badge-primary";
+        } else if (tipo === "Dorama") {
+          badgeClass += "badge-secondary";
+        } else if (tipo === "Serie") {
+          badgeClass += "badge-accent";
+        } else {
+          badgeClass += "badge-badge-outline";
+        }
+
+        return <div className={badgeClass}>{tipo}</div>;
+      },
     },
     {
       id: "acciones",
@@ -151,18 +169,18 @@ export default function AnimePage() {
 
   const breadcrumbItems = [
     { label: "Escritorio", href: "/dashboard" },
-    { label: "Lista de animes", active: true },
+    { label: "Listado de obras", active: true },
   ];
 
   return (
     <DashboardLayout>
       <div className="flex flex-col items-center h-full">
         <div className="w-full mb-4">
-          <h1 className="text-2xl font-bold text-left">Listado de Animes</h1>
+          <h1 className="text-2xl font-bold text-left">Listado de obras</h1>
           <div className="flex items-center justify-between mt-4">
             <Breadcrumb items={breadcrumbItems} />
             <button className="btn btn-wide btn-sm btn-primary mx-auto" onClick={() => setModalOpen(true)}>
-              Agregar Nuevo Anime
+              Agregar Nuevo Obra
             </button>
             <div className="flex items-center ml-4">
               <input
@@ -188,7 +206,7 @@ export default function AnimePage() {
         />
         <ConfirmDialog
           isOpen={confirmDialogOpen}
-          message="¿Estás seguro de que deseas eliminar este anime? Esta acción no se puede deshacer."
+          message="¿Estás seguro de que deseas eliminar esta obra? Esta acción no se puede deshacer."
           onConfirm={confirmDelete}
           onCancel={() => setConfirmDialogOpen(false)}
         />

@@ -94,10 +94,18 @@ export default function TipoPage() {
       header: () => <div className="text-right">Acciones</div>,
       cell: ({ row }) => (
         <div className="flex gap-2 justify-end">
-          <button className="btn btn-sm btn-primary" onClick={() => handleEdit(row.original)}>
+          <button
+            className="btn btn-sm btn-primary"
+            onClick={() => handleEdit(row.original)}
+            disabled={row.original.nombretipo === "Sin definir"}
+          >
             Editar
           </button>
-          <button className="btn btn-sm btn-error" onClick={() => handleDelete(row.original.id)}>
+          <button
+            className="btn btn-sm btn-error"
+            onClick={() => handleDelete(row.original.id)}
+            disabled={row.original.nombretipo === "Sin definir"}
+          >
             Eliminar
           </button>
         </div>

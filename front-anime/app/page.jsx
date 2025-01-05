@@ -15,10 +15,10 @@ export default function Home() {
             height={80}
           />
           <h2 className="mt-6 text-4xl font-extrabold text-center text-gray-900 dark:text-white">
-            ¡Bienvenido a tu lista de animes!
+            ¡Bienvenido a tu lista de ocio!
           </h2>
           <p className="mt-2 text-center text-xl text-gray-500 dark:text-gray-400">
-            Un lugar para almacenar y gestionar todos los animes que has visto.
+            Un lugar para almacenar y gestionar todos las obras de ocio que has visto.
           </p>
           <div className="text-center mt-6">
             <Link
@@ -41,15 +41,15 @@ export default function Home() {
               </div>
               <h3 className="mb-2 text-xl font-bold dark:text-white">Almacena Información</h3>
               <p className="text-gray-500 dark:text-gray-400">
-                Almacena información de los animes vistos, número de capítulos y comentarios.
+                Almacena información de las obras de ocio vistos, número de capítulos y comentarios.
               </p>
             </div>
             <div>
               <div className="flex justify-center items-center mb-4">
                 <i className="bi bi-check-circle-fill text-4xl text-blue-600 dark:text-blue-300"></i>
               </div>
-              <h3 className="mb-2 text-xl font-bold dark:text-white">Marca Animes</h3>
-              <p className="text-gray-500 dark:text-gray-400">Marca si has terminado de ver un anime o no.</p>
+              <h3 className="mb-2 text-xl font-bold dark:text-white">Marca las obras</h3>
+              <p className="text-gray-500 dark:text-gray-400">Marca si has terminado de ver una obra o no.</p>
             </div>
             <div>
               <div className="flex justify-center items-center mb-4">

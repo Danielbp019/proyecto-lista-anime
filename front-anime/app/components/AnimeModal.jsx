@@ -71,7 +71,7 @@ export default function AnimeModal({ isOpen, anime, onClose, onSave, tipos }) {
   return (
     <div className="modal modal-open">
       <div className="modal-box">
-        <h3 className="font-bold text-lg">{anime ? "Editar Anime" : "Agregar Nuevo Anime"}</h3>
+        <h3 className="font-bold text-lg">{anime ? "Editar Obra" : "Agregar Nuevo Obra"}</h3>
         <div className="form-control">
           <label className="label">
             <span className="label-text">Nombre</span>
