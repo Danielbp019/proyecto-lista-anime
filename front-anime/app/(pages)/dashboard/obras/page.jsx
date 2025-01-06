@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from "react";
 import { useReactTable, getCoreRowModel, getPaginationRowModel, getFilteredRowModel } from "@tanstack/react-table";
 import { getAnimes, createAnime, updateAnime, deleteAnime } from "@/app/services/animesService";
-import { getTipos } from "@/app/services/tiposService"; // Asegúrate de tener esta función en tu servicio
+import { getTipos } from "@/app/services/tiposService";
 import DashboardLayout from "@/app/layouts/DashboardLayout";
 // Componentes
 import AnimeModal from "@/app/components/AnimeModal";
@@ -36,7 +36,7 @@ export default function AnimePage() {
     } else {
       console.error("Error obteniendo las obras:", result.error);
       setAlertMessage(`Error al obtener las obras: ${result.error}`);
-      setAlertDangerOpen(true); // Mostrar la alerta de error
+      setAlertDangerOpen(true);
     }
     setLoading(false);
   };
@@ -74,7 +74,7 @@ export default function AnimePage() {
       setAlertSuccessOpen(true);
     } else {
       setAlertMessage(`Error al eliminar la obra: ${result.error}`);
-      setAlertDangerOpen(true); // Mostrar la alerta de error
+      setAlertDangerOpen(true);
     }
     setAnimeToDelete(null);
   };
@@ -95,7 +95,7 @@ export default function AnimePage() {
       setAlertSuccessOpen(true);
     } else {
       setAlertMessage(`Error al guardar la obra: ${result.error}`);
-      setAlertDangerOpen(true); // Mostrar la alerta de error
+      setAlertDangerOpen(true);
     }
   };
 
