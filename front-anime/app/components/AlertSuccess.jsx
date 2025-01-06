@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from "react";
 
 const AlertSuccess = ({ isOpen, message, onClose }) => {
-  const [seconds, setSeconds] = useState(10);
+  const [seconds, setSeconds] = useState(5); // Cambiar a 5 segundos
 
   useEffect(() => {
     if (isOpen) {
-      const timer = setTimeout(onClose, 10000); // Cerrar automáticamente después de 10 segundos
+      const timer = setTimeout(onClose, 5000); // Cerrar automáticamente después de 10 segundos
       const interval = setInterval(() => {
         setSeconds((prevSeconds) => prevSeconds - 1);
       }, 1000);
@@ -15,7 +15,7 @@ const AlertSuccess = ({ isOpen, message, onClose }) => {
       return () => {
         clearTimeout(timer);
         clearInterval(interval);
-        setSeconds(10); // Resetear el contador cuando el componente se cierra
+        setSeconds(5); // Resetear el contador cuando el componente se cierra
       };
     }
   }, [isOpen, onClose]);
