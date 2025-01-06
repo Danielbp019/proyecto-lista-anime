@@ -110,12 +110,24 @@ export default function AnimePage() {
     setSelectedTipo(""); // Limpiar filtro de tipo
   };
 
+  const handleNameFilterChange = (e) => {
+    const filterValue = e.target.value;
+    setColumnFilters((prevFilters) => {
+      const newFilters = prevFilters.filter((filter) => filter.id !== "nombre");
+      if (filterValue !== "") {
+        newFilters.push({ id: "nombre", value: filterValue });
+      }
+      return newFilters;
+    });
+  };
+
   const handleTipoChange = (e) => {
-    setSelectedTipo(e.target.value);
+    const filterValue = e.target.value;
+    setSelectedTipo(filterValue);
     setColumnFilters((prevFilters) => {
       const newFilters = prevFilters.filter((filter) => filter.id !== "tipo_id");
-      if (e.target.value !== "") {
-        newFilters.push({ id: "tipo_id", value: e.target.value });
+      if (filterValue !== "") {
+        newFilters.push({ id: "tipo_id", value: filterValue });
       }
       return newFilters;
     });
@@ -151,7 +163,6 @@ export default function AnimePage() {
         } else {
           badgeClass += "badge-badge-outline";
         }
-
         return <div className={badgeClass}>{tipo}</div>;
       },
     },
@@ -202,7 +213,7 @@ export default function AnimePage() {
                 placeholder="Buscar por nombre..."
                 className="input input-bordered input-primary input-sm w-full max-w-xs"
                 value={columnFilters.find((filter) => filter.id === "nombre")?.value || ""}
-                onChange={(e) => setColumnFilters([{ id: "nombre", value: e.target.value }])}
+                onChange={handleNameFilterChange}
               />
               <button className="btn btn-sm btn-primary ml-2" onClick={handleClearSearch}>
                 Borrar
