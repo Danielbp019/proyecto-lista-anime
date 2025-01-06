@@ -26,6 +26,7 @@ export default function AnimePage() {
   const [alertDangerOpen, setAlertDangerOpen] = useState(false); // Estado para controlar la alerta de error
   const [alertMessage, setAlertMessage] = useState(""); // Estado para el mensaje de la alerta
   const [tipos, setTipos] = useState({});
+  const [selectedTipo, setSelectedTipo] = useState(""); // Estado para el filtro de tipo
 
   const fetchAnimes = async () => {
     setLoading(true);
@@ -106,6 +107,18 @@ export default function AnimePage() {
 
   const handleClearSearch = () => {
     setColumnFilters([]);
+    setSelectedTipo(""); // Limpiar filtro de tipo
+  };
+
+  const handleTipoChange = (e) => {
+    setSelectedTipo(e.target.value);
+    setColumnFilters((prevFilters) => {
+      const newFilters = prevFilters.filter((filter) => filter.id !== "tipo_id");
+      if (e.target.value !== "") {
+        newFilters.push({ id: "tipo_id", value: e.target.value });
+      }
+      return newFilters;
+    });
   };
 
   const columns = [
@@ -121,6 +134,7 @@ export default function AnimePage() {
     {
       accessorKey: "tipo_id",
       header: "Tipo",
+      filterFn: "equalsString", // Agregar filtro para tipo_id
       cell: ({ row }) => {
         const tipo = tipos[row.original.tipo_id] || "Sin definir";
 
@@ -193,6 +207,14 @@ export default function AnimePage() {
               <button className="btn btn-sm btn-primary ml-2" onClick={handleClearSearch}>
                 Borrar
               </button>
+              <select className="select select-primary select-sm ml-2" value={selectedTipo} onChange={handleTipoChange}>
+                <option value="">Todos los Tipos</option>
+                {Object.entries(tipos).map(([key, value]) => (
+                  <option key={key} value={key}>
+                    {value}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         </div>
