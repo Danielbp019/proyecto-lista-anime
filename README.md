@@ -26,10 +26,10 @@ Este proyecto no solo permite almacenar una lista de obras, sino que ofrece una 
 
 ## Vistazo al proyecto:
 
-- **Login:**
+- **Login:** Tema por defecto dark
   ![login](./img-portada/login.jpg)
 
-- **Registro:**
+- **Registro:** Tema por defecto dark
   ![registro](./img-portada/registro.jpg)
 
 - **Escritorio:**
@@ -42,7 +42,7 @@ Este proyecto no solo permite almacenar una lista de obras, sino que ofrece una 
   ![operaciones-csv](./img-portada/operaciones-csv.jpg)
 
 - **Tipos:**
-  ![tipos-obra](./img-portada/tipos-obra.jpg)
+  ![tipos-obra](./img-portada/tipo-obra.jpg)
 
 - **Configuracion:**
   ![configuracion](./img-portada/configuracion.jpg)

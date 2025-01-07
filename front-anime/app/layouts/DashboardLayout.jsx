@@ -124,7 +124,10 @@ export default function DashboardLayout({ children }) {
             </button>
             <div className="flex items-center text-primary">
               <Image src="/logo.png" alt="Logo" className="h-6 w-auto" width={50} height={50} />
-              <span className="font-bold ml-2">DB Software - Proyecto Lista de ocio.</span>
+              <span className="font-bold ml-2" id="miFirma">
+                Daniel Bautista Pradilla
+              </span>
+              <span className="font-bold ml-2">- Proyecto Lista de ocio.</span>
             </div>
           </div>
           {/* Mensajes de error */}
