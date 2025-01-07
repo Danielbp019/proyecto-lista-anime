@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Models\AnimeModel;
+use App\Models\ObraModel;
 // Validaciones
-use App\Http\Requests\AnimeStoreRequest;
-use App\Http\Requests\AnimeUpdateRequest;
+use App\Http\Requests\ObraStoreRequest;
+use App\Http\Requests\ObraUpdateRequest;
 use Illuminate\Support\Carbon;
 
-class AnimeController extends Controller
+class ObraController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +21,7 @@ class AnimeController extends Controller
             // Obtener el id del usuario desde la solicitud
             $userId = $request->id;
             // Select con filtro por user_id
-            $anime = AnimeModel::select(
+            $obra = ObraModel::select(
                 'id',
                 'nombre',
                 'numero_capitulos',
@@ -34,7 +34,7 @@ class AnimeController extends Controller
                 ->orderBy('nombre', 'asc')
                 ->get();
 
-            return response()->json($anime);
+            return response()->json($obra);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
@@ -43,11 +43,11 @@ class AnimeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(AnimeStoreRequest $request)
+    public function store(ObraStoreRequest $request)
     {
         //
         try {
-            $nuevoAnime = AnimeModel::create([
+            $nuevoObra = ObraModel::create([
                 'nombre' => ucwords(strtolower(trim($request['nombre']))),
                 'numero_capitulos' => trim($request['numero_capitulos']),
                 'visto' => $request['visto'],
@@ -57,7 +57,7 @@ class AnimeController extends Controller
                 'tipo_id' => $request->tipo_id
             ]);
 
-            return response()->json(['success' => true, 'nuevoAnime' => $nuevoAnime], 201);
+            return response()->json(['success' => true, 'nuevoObra' => $nuevoObra], 201);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
@@ -70,9 +70,9 @@ class AnimeController extends Controller
     {
         //
         try {
-            $animeBuscar = AnimeModel::findOrFail($id);
+            $obraBuscar = ObraModel::findOrFail($id);
 
-            return response()->json($animeBuscar);
+            return response()->json($obraBuscar);
         } catch (ModelNotFoundException $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 404);
         }
@@ -81,12 +81,12 @@ class AnimeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(AnimeUpdateRequest $request, string $id)
+    public function update(ObraUpdateRequest $request, string $id)
     {
         //
         try {
-            $editarAnime = AnimeModel::findOrFail($id);
-            $editarAnime->fill([
+            $editarObra = ObraModel::findOrFail($id);
+            $editarObra->fill([
                 'nombre' => ucwords(strtolower(trim($request['nombre']))),
                 'numero_capitulos' => trim($request['numero_capitulos']),
                 'visto' => $request['visto'],
@@ -94,9 +94,9 @@ class AnimeController extends Controller
                 'fecha_actualizacion' => Carbon::now()->format('Y-m-d'),
                 'tipo_id' => $request->tipo_id
             ]);
-            $editarAnime->save();
+            $editarObra->save();
 
-            return response()->json(['success' => true, 'editarAnime' => $editarAnime], 200);
+            return response()->json(['success' => true, 'editarObra' => $editarObra], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
@@ -109,10 +109,10 @@ class AnimeController extends Controller
     {
         //
         try {
-            $borrarAnime = AnimeModel::findOrFail($id);
-            $borrarAnime->delete();
+            $borrarObra = ObraModel::findOrFail($id);
+            $borrarObra->delete();
 
-            return response()->json(['success' => true, 'message' => 'Anime eliminado correctamente.'], 200);
+            return response()->json(['success' => true, 'message' => 'Obra eliminado correctamente.'], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }

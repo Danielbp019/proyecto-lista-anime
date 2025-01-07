@@ -1,4 +1,4 @@
-// services/csvanimeService.jsx
+// services/csvobraService.jsx
 import apiClient from "./axiosConfig";
 
 // Descargar el archivo CSV
@@ -18,7 +18,7 @@ export const getExcelcsv = async () => {
 
     // Configurar el nombre del archivo descargable
     link.href = url;
-    link.setAttribute("download", `Lista-anime_${currentDate}.csv`);
+    link.setAttribute("download", `Lista-de-ocio_${currentDate}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link); // Limpiar el DOM después de la descarga

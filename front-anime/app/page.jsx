@@ -9,7 +9,7 @@ export default function Home() {
         <div className="max-w-screen-lg mb-8 lg:mb-16 text-center">
           <Image
             className="mx-auto h-12 w-auto"
-            src="/logo.png" // Asegúrate de colocar la ruta correcta de tu archivo PNG
+            src="/logo.png"
             alt="Anime List"
             width={80}
             height={80}

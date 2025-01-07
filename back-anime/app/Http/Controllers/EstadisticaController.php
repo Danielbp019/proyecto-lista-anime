@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AnimeModel;
+use App\Models\ObraModel;
 use Illuminate\Http\Request;
 
 class EstadisticaController extends Controller
@@ -12,7 +12,7 @@ class EstadisticaController extends Controller
     {
         try {
             $userId = $request->id;
-            $totalRegistros = AnimeModel::where('user_id', $userId)->count();
+            $totalRegistros = ObraModel::where('user_id', $userId)->count();
 
             return response()->json(['total_registros' => $totalRegistros]);
         } catch (\Exception $e) {
@@ -25,7 +25,7 @@ class EstadisticaController extends Controller
     {
         try {
             $userId = $request->id;
-            $tipo1 = AnimeModel::where('user_id', $userId)->where('tipo_id', 1)->count();
+            $tipo1 = ObraModel::where('user_id', $userId)->where('tipo_id', 1)->count();
 
             return response()->json(['tipo_1' => $tipo1]);
         } catch (\Exception $e) {
@@ -38,7 +38,7 @@ class EstadisticaController extends Controller
     {
         try {
             $userId = $request->id;
-            $tipo2 = AnimeModel::where('user_id', $userId)->where('tipo_id', 2)->count();
+            $tipo2 = ObraModel::where('user_id', $userId)->where('tipo_id', 2)->count();
 
             return response()->json(['tipo_2' => $tipo2]);
         } catch (\Exception $e) {
@@ -51,7 +51,7 @@ class EstadisticaController extends Controller
     {
         try {
             $userId = $request->id;
-            $tipo3 = AnimeModel::where('user_id', $userId)->where('tipo_id', 3)->count();
+            $tipo3 = ObraModel::where('user_id', $userId)->where('tipo_id', 3)->count();
 
             return response()->json(['tipo_3' => $tipo3]);
         } catch (\Exception $e) {
@@ -64,7 +64,7 @@ class EstadisticaController extends Controller
     {
         try {
             $userId = $request->id;
-            $tipo4 = AnimeModel::where('user_id', $userId)->where('tipo_id', 4)->count();
+            $tipo4 = ObraModel::where('user_id', $userId)->where('tipo_id', 4)->count();
 
             return response()->json(['tipo_4' => $tipo4]);
         } catch (\Exception $e) {
@@ -77,7 +77,7 @@ class EstadisticaController extends Controller
     {
         try {
             $userId = $request->id;
-            $otrosTipos = AnimeModel::where('user_id', $userId)
+            $otrosTipos = ObraModel::where('user_id', $userId)
                 ->whereNotIn('tipo_id', [1, 2, 3, 4])
                 ->count();
 

@@ -1,9 +1,9 @@
-// (pages)/dashboard/csvanime/page.jsx
+// (pages)/dashboard/csvobra/page.jsx
 "use client";
 
 import DashboardLayout from "@/app/layouts/DashboardLayout";
 import { useState, useEffect } from "react";
-import { getExcelcsv, createExcelcsv, deleteExcelcsv } from "@/app/services/csvanimeService";
+import { getExcelcsv, createExcelcsv, deleteExcelcsv } from "@/app/services/csvobraService";
 import "@/app/styles/globals.css";
 // Componentes
 import ConfirmDialog from "@/app/components/ConfirmDialog";
@@ -11,7 +11,7 @@ import AlertSuccess from "@/app/components/AlertSuccess";
 import AlertDanger from "@/app/components/AlertDanger";
 import Breadcrumb from "@/app/components/Breadcrumb";
 
-export default function CsvanimePage() {
+export default function CsvobraPage() {
   const [file, setFile] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false); // Estado para el diálogo de confirmación
   const [isAlertOpen, setIsAlertOpen] = useState(false); // Estado para el alert de éxito

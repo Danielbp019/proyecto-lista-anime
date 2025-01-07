@@ -14,15 +14,15 @@ return new class extends Migration
         // Crear la tabla tipos
         Schema::create('tipos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombretipo')->comment('Nombre del tipo: anime, dorama, serie.')->nullable(false)->unique();
+            $table->string('nombretipo')->comment('Nombre del tipo: obra, dorama, serie.')->nullable(false)->unique();
         });
 
-        // Crear la tabla animes
-        Schema::create('animes', function (Blueprint $table) {
+        // Crear la tabla obras
+        Schema::create('obras', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre')->comment('Nombre del anime en español')->nullable(false)->unique();
+            $table->string('nombre')->comment('Nombre del obra en español')->nullable(false)->unique();
             $table->integer('numero_capitulos')->comment('Número de capítulos')->nullable(false);
-            $table->boolean('visto')->default(1)->comment('Si el anime terminó es 1, de lo contrario es 0');
+            $table->boolean('visto')->default(1)->comment('Si el obra terminó es 1, de lo contrario es 0');
             $table->text('comentarios')->nullable()->comment('Expresate para que nunca lo olvides');
             $table->date('fecha_actualizacion')->nullable()->comment('Fecha de la última actualización');
             $table->char('user_id', 36); // Campo para la relación con la tabla users
@@ -40,8 +40,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Eliminar la tabla animes primero
-        Schema::dropIfExists('animes');
+        // Eliminar la tabla obras primero
+        Schema::dropIfExists('obras');
         // Luego eliminar la tabla tipos
         Schema::dropIfExists('tipos');
     }

@@ -11,6 +11,7 @@ import {
   getTipo4,
   getOtrosTipos,
 } from "@/app/services/estadisticaService";
+import ExplainCSVModal from "@/app/components/ExplainCSVModal";
 
 export default function DashboardPage() {
   const [stats, setStats] = useState({
@@ -22,6 +23,7 @@ export default function DashboardPage() {
     otrosTipos: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -133,13 +135,16 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="collapse collapse-arrow bg-base-200 w-full mt-4">
-          <input type="checkbox" />
-          <div className="collapse-title text-xl font-medium">Clic aquí para Mostar/Ocultar como se usa el CSV</div>
-          <div className="collapse-content">
-            <p>hello</p>
+        <div className="card w-full bg-base-100 shadow-xl mt-4 shadow-all">
+          <div className="card-body">
+            <h2 className="card-title">Explicación del uso de CSV</h2>
+            <button className="btn btn-primary mt-4" onClick={() => setIsModalOpen(true)}>
+              Ver más
+            </button>
           </div>
         </div>
+
+        {isModalOpen && <ExplainCSVModal onClose={() => setIsModalOpen(false)} />}
       </div>
     </DashboardLayout>
   );

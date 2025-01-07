@@ -1,4 +1,4 @@
-// components/AnimeModal.jsx
+// components/TipoModal.jsx
 
 import React, { useState, useEffect } from "react";
 

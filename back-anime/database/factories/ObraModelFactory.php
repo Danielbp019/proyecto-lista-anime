@@ -3,14 +3,14 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\AnimeModel;
+use App\Models\ObraModel;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\AnimeModel>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ObraModel>
  */
-class AnimeModelFactory extends Factory
+class ObraModelFactory extends Factory
 {
-    protected $model = AnimeModel::class;
+    protected $model = ObraModel::class;
 
     public function definition()
     {

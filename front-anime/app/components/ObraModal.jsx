@@ -1,8 +1,8 @@
-// components/AnimeModal.jsx
+// components/ObraModal.jsx
 
 import React, { useState, useEffect } from "react";
 
-export default function AnimeModal({ isOpen, anime, onClose, onSave, tipos }) {
+export default function ObraModal({ isOpen, obra, onClose, onSave, tipos }) {
   // Recibir tipos como prop
   const [formData, setFormData] = useState({
     id: 0,
@@ -18,8 +18,8 @@ export default function AnimeModal({ isOpen, anime, onClose, onSave, tipos }) {
   useEffect(() => {
     // Obtener el user_id del localStorage
     const userId = localStorage.getItem("user_id");
-    if (anime) {
-      setFormData({ ...anime, user_id: userId });
+    if (obra) {
+      setFormData({ ...obra, user_id: userId });
     } else {
       setFormData({
         id: 0,
@@ -31,7 +31,7 @@ export default function AnimeModal({ isOpen, anime, onClose, onSave, tipos }) {
         tipo_id: "", // Inicializar tipo_id
       });
     }
-  }, [anime]);
+  }, [obra]);
 
   const handleChange = (key, value) => {
     setFormData({ ...formData, [key]: value });
@@ -71,7 +71,7 @@ export default function AnimeModal({ isOpen, anime, onClose, onSave, tipos }) {
   return (
     <div className="modal modal-open">
       <div className="modal-box">
-        <h3 className="font-bold text-lg">{anime ? "Editar Obra" : "Agregar Nuevo Obra"}</h3>
+        <h3 className="font-bold text-lg">{obra ? "Editar Obra" : "Agregar Nuevo Obra"}</h3>
         <div className="form-control">
           <label className="label">
             <span className="label-text">Nombre</span>

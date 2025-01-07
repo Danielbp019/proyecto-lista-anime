@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class AnimeModel extends Model
+class ObraModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'animes';
+    protected $table = 'obras';
 
     public $timestamps = false;
 
@@ -27,13 +27,13 @@ class AnimeModel extends Model
         'visto' => 'integer',
     ];
 
-    /** * Obtener el usuario que posee este anime. */
+    /** * Obtener el usuario que posee este obra. */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    /** * Obtener el tipo al que pertenece este anime. */
+    /** * Obtener el tipo al que pertenece este obra. */
     public function tipo()
     {
         return $this->belongsTo(TipoModel::class, 'tipo_id', 'id');

@@ -17,9 +17,9 @@ class TipoModel extends Model
         'nombretipo'
     ];
 
-    /** * Obtener los animes para este tipo. */
-    public function animes()
+    /** * Obtener los obras para este tipo. */
+    public function obras()
     {
-        return $this->hasMany(AnimeModel::class, 'tipo_id', 'id');
+        return $this->hasMany(ObraModel::class, 'tipo_id', 'id');
     }
 }

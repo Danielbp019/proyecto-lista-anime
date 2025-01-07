@@ -76,10 +76,10 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * Define la relación con el modelo AnimeModel.
+     * Define la relación con el modelo ObraModel.
      */
-    public function animes()
+    public function obras()
     {
-        return $this->hasMany(AnimeModel::class, 'user_id', 'id');
+        return $this->hasMany(ObraModel::class, 'user_id', 'id');
     }
 }

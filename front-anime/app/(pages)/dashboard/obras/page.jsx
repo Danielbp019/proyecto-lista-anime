@@ -1,26 +1,26 @@
-// (pages)/dashboard/anime/page.jsx
+// (pages)/dashboard/obra/page.jsx
 "use client";
 
 import React, { useState, useEffect } from "react";
 import { useReactTable, getCoreRowModel, getPaginationRowModel, getFilteredRowModel } from "@tanstack/react-table";
-import { getAnimes, createAnime, updateAnime, deleteAnime } from "@/app/services/animesService";
+import { getObras, createObra, updateObra, deleteObra } from "@/app/services/obrasService";
 import { getTipos } from "@/app/services/tiposService";
 import DashboardLayout from "@/app/layouts/DashboardLayout";
 // Componentes
-import AnimeModal from "@/app/components/AnimeModal";
+import ObraModal from "@/app/components/ObraModal";
 import ConfirmDialog from "@/app/components/ConfirmDialog";
 import AlertSuccess from "@/app/components/AlertSuccess";
 import AlertDanger from "@/app/components/AlertDanger";
 import Table from "@/app/components/Table";
 import Breadcrumb from "@/app/components/Breadcrumb";
 
-export default function AnimePage() {
+export default function ObraPage() {
   const [data, setData] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
-  const [animeToEdit, setAnimeToEdit] = useState(null);
+  const [obraToEdit, setObraToEdit] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
-  const [animeToDelete, setAnimeToDelete] = useState(null);
+  const [obraToDelete, setObraToDelete] = useState(null);
   const [loading, setLoading] = useState(true);
   const [alertSuccessOpen, setAlertSuccessOpen] = useState(false); // Estado para controlar la alerta de éxito
   const [alertDangerOpen, setAlertDangerOpen] = useState(false); // Estado para controlar la alerta de error
@@ -28,10 +28,10 @@ export default function AnimePage() {
   const [tipos, setTipos] = useState({});
   const [selectedTipo, setSelectedTipo] = useState(""); // Estado para el filtro de tipo
 
-  const fetchAnimes = async () => {
+  const fetchObras = async () => {
     setLoading(true);
     const userId = localStorage.getItem("user_id"); // Obtener user_id del localStorage
-    const result = await getAnimes(userId); // Pasar userId a getAnimes
+    const result = await getObras(userId); // Pasar userId a getObras
     if (result.success) {
       setData(result.data);
     } else {
@@ -56,20 +56,20 @@ export default function AnimePage() {
   };
 
   useEffect(() => {
-    fetchAnimes();
+    fetchObras();
     fetchTipos();
   }, []);
 
   const handleDelete = (id) => {
-    setAnimeToDelete(id);
+    setObraToDelete(id);
     setConfirmDialogOpen(true);
   };
 
   const confirmDelete = async () => {
     setConfirmDialogOpen(false);
-    const result = await deleteAnime(animeToDelete);
+    const result = await deleteObra(obraToDelete);
     if (result.success) {
-      await fetchAnimes();
+      await fetchObras();
       setColumnFilters([]);
       setAlertMessage("Obra eliminada con éxito");
       setAlertSuccessOpen(true);
@@ -77,22 +77,22 @@ export default function AnimePage() {
       setAlertMessage(`Error al eliminar la obra: ${result.error}`);
       setAlertDangerOpen(true);
     }
-    setAnimeToDelete(null);
+    setObraToDelete(null);
   };
 
-  const handleEdit = (anime) => {
-    setAnimeToEdit(anime);
+  const handleEdit = (obra) => {
+    setObraToEdit(obra);
     setModalOpen(true);
   };
 
-  const handleSave = async (anime) => {
-    const result = animeToEdit ? await updateAnime(animeToEdit.id, anime) : await createAnime(anime);
+  const handleSave = async (obra) => {
+    const result = obraToEdit ? await updateObra(obraToEdit.id, obra) : await createObra(obra);
 
     if (result.success) {
       setModalOpen(false);
-      setAnimeToEdit(null);
-      await fetchAnimes();
-      setAlertMessage(animeToEdit ? "Obra actualizada con éxito" : "Obra creada con éxito");
+      setObraToEdit(null);
+      await fetchObras();
+      setAlertMessage(obraToEdit ? "Obra actualizada con éxito" : "Obra creada con éxito");
       setAlertSuccessOpen(true);
     } else {
       setAlertMessage(`Error al guardar la obra: ${result.error}`);
@@ -102,7 +102,7 @@ export default function AnimePage() {
 
   const handleCloseModal = () => {
     setModalOpen(false);
-    setAnimeToEdit(null);
+    setObraToEdit(null);
   };
 
   const handleClearSearch = () => {
@@ -230,9 +230,9 @@ export default function AnimePage() {
           </div>
         </div>
         <Table table={table} loading={loading} columns={columns} />
-        <AnimeModal
+        <ObraModal
           isOpen={isModalOpen}
-          anime={animeToEdit}
+          obra={obraToEdit}
           onClose={handleCloseModal}
           onSave={handleSave}
           tipos={tipos} // Pasar tipos al modal

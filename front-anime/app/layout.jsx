@@ -10,7 +10,7 @@ const roboto = Roboto({
 });
 
 export const metadata = {
-  title: "Lista anime",
+  title: "Tu lista ocio",
   description: "Hecho con Next.js 15 y asistido con IA.",
 };
 

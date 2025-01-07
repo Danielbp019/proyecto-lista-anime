@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\CsvFileRequest;
-use App\Models\AnimeModel;
+use App\Models\ObraModel;
 use Illuminate\Support\Facades\Response;
 
 class ExcelcsvController extends Controller
@@ -48,34 +48,34 @@ class ExcelcsvController extends Controller
             // Obtener el user_id como valor directo del request
             $userId = $request->user_id;
             // Iterar sobre los datos y llenarlos en la tabla
-            $animes = [];
+            $obras = [];
             $rowCount = 1;
             foreach ($csvData as $row) {
                 // Si la fila tiene menos columnas, llenar las columnas faltantes con valores predeterminados
                 $row = array_pad($row, count($expectedHeaders), '');
-                $animeData = array_combine($expectedHeaders, $row);
+                $obraData = array_combine($expectedHeaders, $row);
 
                 // Validar que numero_capitulos sea un número
-                if (!is_numeric($animeData['numero_capitulos'])) {
+                if (!is_numeric($obraData['numero_capitulos'])) {
                     return response()->json([
                         'success' => false,
                         'message' => 'El valor de numero_capitulos no es válido en la fila ' . $rowCount
                     ], 400);
                 }
 
-                $animes[] = [
-                    'nombre' => $animeData['nombre'],
-                    'numero_capitulos' => (int)$animeData['numero_capitulos'],
-                    'visto' => $animeData['visto'] ?: 1,
-                    'comentarios' => $animeData['comentarios'] ?: 'Nada que decir o leer por aquí...',
-                    'fecha_actualizacion' => $animeData['fecha_actualizacion'] ?: now(),
+                $obras[] = [
+                    'nombre' => $obraData['nombre'],
+                    'numero_capitulos' => (int)$obraData['numero_capitulos'],
+                    'visto' => $obraData['visto'] ?: 1,
+                    'comentarios' => $obraData['comentarios'] ?: 'Nada que decir o leer por aquí...',
+                    'fecha_actualizacion' => $obraData['fecha_actualizacion'] ?: now(),
                     'user_id' => $userId, // Agregar el user_id al arreglo
-                    'tipo_id' => $animeData['tipo_id'] ?: 1, // Agregar el tipo_id al arreglo
+                    'tipo_id' => $obraData['tipo_id'] ?: 1, // Agregar el tipo_id al arreglo
                 ];
                 $rowCount++;
             }
             // Insertar en la base de datos
-            AnimeModel::insert($animes);
+            ObraModel::insert($obras);
 
             return response()->json(['success' => true, 'message' => 'CSV cargado exitosamente.'], 200);
         } catch (\Exception $e) {
@@ -96,18 +96,18 @@ class ExcelcsvController extends Controller
             // Obtener el user_id como valor directo del request
             $userId = $id;
 
-            // Obtener los registros de la tabla `animes` filtrados por user_id
-            $animes = AnimeModel::where('user_id', $userId)->get();
+            // Obtener los registros de la tabla `obras` filtrados por user_id
+            $obras = ObraModel::where('user_id', $userId)->get();
 
-            if ($animes->isEmpty()) {
+            if ($obras->isEmpty()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'No hay registros en la tabla animes para este usuario.'
+                    'message' => 'No hay registros en la tabla obras para este usuario.'
                 ], 404);
             }
 
             // Crear un archivo CSV temporal
-            $fileName = 'animes_' . now()->format('Ymd_His') . '.csv';
+            $fileName = 'obras_' . now()->format('Ymd_His') . '.csv';
             $filePath = storage_path("app/public/{$fileName}");
             $file = fopen($filePath, 'w');
 
@@ -116,14 +116,14 @@ class ExcelcsvController extends Controller
             fputcsv($file, $headers);
 
             // Agregar los datos de la tabla al archivo CSV
-            foreach ($animes as $anime) {
+            foreach ($obras as $obra) {
                 fputcsv($file, [
-                    $anime->nombre,
-                    $anime->numero_capitulos,
-                    $anime->visto,
-                    $anime->comentarios,
-                    $anime->fecha_actualizacion,
-                    $anime->tipo_id
+                    $obra->nombre,
+                    $obra->numero_capitulos,
+                    $obra->visto,
+                    $obra->comentarios,
+                    $obra->fecha_actualizacion,
+                    $obra->tipo_id
                 ]);
             }
             fclose($file);
@@ -152,12 +152,12 @@ class ExcelcsvController extends Controller
     public function destroy(string $id)
     {
         try {
-            // Truncar la tabla `animes`
-            AnimeModel::truncate();
+            // Truncar la tabla `obras`
+            ObraModel::truncate();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Todos los registros de la tabla animes han sido eliminados.'
+                'message' => 'Todos los registros de la tabla obras han sido eliminados.'
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
