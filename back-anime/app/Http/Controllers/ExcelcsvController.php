@@ -66,7 +66,7 @@ class ExcelcsvController extends Controller
                 $obras[] = [
                     'nombre' => $obraData['nombre'],
                     'numero_capitulos' => (int)$obraData['numero_capitulos'],
-                    'visto' => isset($obraData['visto']) ? (int)$obraData['visto'] : 1,
+                    'visto' => isset($obraData['visto']) ?: 1,
                     'comentarios' => $obraData['comentarios'] ?: 'Nada que decir o leer por aquí...',
                     'fecha_actualizacion' => $obraData['fecha_actualizacion'] ?: now(),
                     'user_id' => $userId,
