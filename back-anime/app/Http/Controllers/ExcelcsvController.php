@@ -66,11 +66,11 @@ class ExcelcsvController extends Controller
                 $obras[] = [
                     'nombre' => $obraData['nombre'],
                     'numero_capitulos' => (int)$obraData['numero_capitulos'],
-                    'visto' => $obraData['visto'] ?: 1,
+                    'visto' => isset($obraData['visto']) ? (int)$obraData['visto'] : 1,
                     'comentarios' => $obraData['comentarios'] ?: 'Nada que decir o leer por aquí...',
                     'fecha_actualizacion' => $obraData['fecha_actualizacion'] ?: now(),
-                    'user_id' => $userId, // Agregar el user_id al arreglo
-                    'tipo_id' => $obraData['tipo_id'] ?: 1, // Agregar el tipo_id al arreglo
+                    'user_id' => $userId,
+                    'tipo_id' => $obraData['tipo_id'] ?: 1,
                 ];
                 $rowCount++;
             }

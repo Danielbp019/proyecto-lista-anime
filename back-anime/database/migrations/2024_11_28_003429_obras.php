@@ -22,7 +22,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre')->comment('Nombre del obra en español')->nullable(false)->unique();
             $table->integer('numero_capitulos')->comment('Número de capítulos')->nullable(false);
-            $table->boolean('visto')->default(1)->comment('Si el obra terminó es 1, de lo contrario es 0');
+            $table->boolean('visto')->comment('Si el obra terminó es 1, de lo contrario es 0')->nullable(false);
             $table->text('comentarios')->nullable()->comment('Expresate para que nunca lo olvides');
             $table->date('fecha_actualizacion')->nullable()->comment('Fecha de la última actualización');
             $table->char('user_id', 36); // Campo para la relación con la tabla users

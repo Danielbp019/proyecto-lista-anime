@@ -6,6 +6,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\ObraModel;
+use App\Models\User;
+use App\Models\TipoModel;
 
 class ObraControllerTest extends TestCase
 {
@@ -13,56 +15,87 @@ class ObraControllerTest extends TestCase
 
     public function test_obra_index()
     {
-        $response = $this->get('/api/obras');
+        $user = User::factory()->create();
+        ObraModel::factory()->count(3)->create(['user_id' => $user->id]);
+
+        $response = $this->actingAs($user)->json('GET', '/api/obras', ['id' => $user->id]);
+
         $response->assertStatus(200);
-        $response->assertJsonStructure(['*' => ['id', 'nombre', 'numero_capitulos', 'visto', 'comentarios', 'fecha_actualizacion']]);
+        $response->assertJsonStructure(['*' => ['id', 'nombre', 'numero_capitulos', 'visto', 'comentarios', 'fecha_actualizacion', 'tipo_id']]);
     }
 
     public function test_obra_store()
     {
-        $data = ['nombre' => 'Nuevo Obra', 'numero_capitulos' => 12, 'visto' => 1, 'comentarios' => 'Este es un nuevo obra.', 'fecha_actualizacion' => '2024-12-01'];
-        $response = $this->post('/api/obras', $data);
+        $user = User::factory()->create();
+        // Crear un registro en la tabla tipos
+        $tipo = TipoModel::create(['nombretipo' => 'Tipo de Ejemplo']);
+
+        $data = [
+            'nombre' => 'Nueva Obra',
+            'numero_capitulos' => 12,
+            'visto' => 1,
+            'comentarios' => 'Este es una nueva obra.',
+            'user_id' => $user->id,
+            'tipo_id' => $tipo->id
+        ];
+
+        $response = $this->actingAs($user)->post('/api/obras', $data);
+
         $response->assertStatus(201);
-        $response->assertJson(['success' => true, 'nuevoObra' => $data]);
+        $response->assertJson(['success' => true, 'nuevoObra' => $response['nuevoObra']]);
         $this->assertDatabaseHas('obras', $data);
     }
 
     public function test_obra_show()
     {
         $obra = ObraModel::factory()->create();
-        $response = $this->get("/api/obras/{$obra->id}");
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->json('GET', "/api/obras/{$obra->id}");
+
         $response->assertStatus(200);
         // Verificar campos específicos
         $response->assertJsonPath('id', $obra->id);
         $response->assertJsonPath('nombre', $obra->nombre);
         $response->assertJsonPath('numero_capitulos', $obra->numero_capitulos);
-        $response->assertJsonPath('visto', (int) $obra->visto); // Convertir booleano a entero
+        $response->assertJsonPath('visto', (int)$obra->visto); // Convertir booleano a entero
         $response->assertJsonPath('comentarios', $obra->comentarios);
         $response->assertJsonPath('fecha_actualizacion', $obra->fecha_actualizacion);
+        $response->assertJsonPath('tipo_id', $obra->tipo_id);
     }
 
     public function test_obra_update()
     {
         $obra = ObraModel::factory()->create();
-        $data = ['nombre' => 'Obra Actualizado', 'numero_capitulos' => 24, 'visto' => 0, 'comentarios' => 'Este obra ha sido actualizado.', 'fecha_actualizacion' => '2024-12-01'];
-        $response = $this->put("/api/obras/{$obra->id}", $data);
+        $user = User::factory()->create();
+
+        $data = [
+            'nombre' => 'Obra Actualizado',
+            'numero_capitulos' => 24,
+            'visto' => 0,
+            'comentarios' => 'Este obra ha sido actualizado.',
+            'tipo_id' => 1
+        ];
+
+        $response = $this->actingAs($user)->put("/api/obras/{$obra->id}", $data);
+
         $response->assertStatus(200);
-        $response->assertJson(['success' => true, 'editarObra' => $data]);
+        $response->assertJson(['success' => true, 'editarObra' => $response['editarObra']]);
         $this->assertDatabaseHas('obras', $data);
     }
 
     public function test_obra_destroy()
     {
-        // Crea una instancia de Obra para la prueba
         $obra = ObraModel::factory()->create();
-        // Verifica que el obra ha sido creado
+        $user = User::factory()->create();
+
         $this->assertDatabaseHas('obras', ['id' => $obra->id]);
-        // Realiza la solicitud de eliminación
-        $response = $this->delete("/api/obras/{$obra->id}");
-        // Verifica el estado de la respuesta
+
+        $response = $this->actingAs($user)->delete("/api/obras/{$obra->id}");
+
         $response->assertStatus(200);
         $response->assertJson(['success' => true, 'message' => 'Obra eliminado correctamente.']);
-        // Verifica que el obra ha sido eliminado
+
         $this->assertDatabaseMissing('obras', ['id' => $obra->id]);
     }
 }

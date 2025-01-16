@@ -59,6 +59,7 @@ class ObraController extends Controller
 
             return response()->json(['success' => true, 'nuevoObra' => $nuevoObra], 201);
         } catch (\Exception $e) {
+            /* \Log::error('Error al crear la obra: ' . $e->getMessage()); Pone el error en el log*/
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }

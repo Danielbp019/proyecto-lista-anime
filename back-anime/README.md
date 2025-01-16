@@ -125,7 +125,7 @@ Registro con sactum y uuid ( La contraseña debe tener al menos dos letras mayú
 POST:   http://localhost:8000/api/register
 ```
 
-Ejecución de pruebas (Las pruebas suelen crean archivos en la carpeta storage/app que son desechables):
+Ejecución de pruebas (Las rutas no deben estar protegidas):
 
 ```sh
 php artisan test
